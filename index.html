@@ -1,0 +1,1470 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kakweia Comercial — Loja Online</title>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+:root {
+  --brand:#0055D4;--brand2:#0044AA;--gold:#D4A017;--gold2:#B8860B;
+  --dark:#06080A;--charcoal:#0F1215;--mid:#181C20;--soft:#222830;
+  --border:#252B32;--border2:#2E3640;--text:#EEF0F2;--muted:#6B7480;
+  --muted2:#4A5260;--white:#FFFFFF;--green:#1A9E5C;--green2:#16854D;
+  --radius:12px;--shadow:0 8px 40px rgba(0,0,0,.7);
+  --topbar-bg:linear-gradient(90deg,#0044AA,#0055D4);
+  --hero-glow:rgba(0,85,212,.18);
+  --splash-glow1:rgba(0,85,212,.4);--splash-glow2:rgba(0,85,212,.8);
+}
+body.theme-white {
+  --dark:#F4F6FA;--charcoal:#FFFFFF;--mid:#EEF1F7;--soft:#E2E7F0;
+  --border:#D0D8E8;--border2:#BEC8DC;--text:#0D1320;--muted:#6272A0;
+  --muted2:#8895B8;--shadow:0 8px 40px rgba(0,0,0,.12);
+  --hero-glow:rgba(0,85,212,.08);
+}
+body.theme-dark {
+  --brand:#2979FF;--brand2:#1565C0;--dark:#000000;--charcoal:#080808;
+  --mid:#101010;--soft:#181818;--border:#1C1C1C;--border2:#262626;
+  --text:#F0F0F0;--muted:#606060;--muted2:#404040;
+  --shadow:0 8px 40px rgba(0,0,0,.95);
+  --topbar-bg:linear-gradient(90deg,#1565C0,#2979FF);
+  --hero-glow:rgba(41,121,255,.15);
+  --splash-glow1:rgba(41,121,255,.4);--splash-glow2:rgba(41,121,255,.8);
+}
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{font-family:'Outfit',sans-serif;background:var(--dark);color:var(--text);min-height:100vh;overflow-x:hidden;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--charcoal);}
+::-webkit-scrollbar-thumb{background:var(--brand);border-radius:3px;}
+
+#splash{position:fixed;inset:0;z-index:9999;background:var(--dark);display:flex;flex-direction:column;align-items:center;justify-content:center;transition:opacity .8s ease,visibility .8s ease;}
+#splash.hide{opacity:0;visibility:hidden;pointer-events:none;}
+.splash-logo-wrap{display:flex;flex-direction:column;align-items:center;gap:20px;animation:splashFadeIn .7s ease both;}
+@keyframes splashFadeIn{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:translateY(0)}}
+.splash-icon{width:96px;height:96px;animation:splashPulse 2s ease infinite;}
+@keyframes splashPulse{0%,100%{filter:drop-shadow(0 0 12px var(--splash-glow1))}50%{filter:drop-shadow(0 0 28px var(--splash-glow2))}}
+.splash-brand{text-align:center;}
+.splash-brand .name{font-family:'Playfair Display',serif;font-size:clamp(28px,6vw,48px);font-weight:900;color:var(--white);letter-spacing:-0.5px;line-height:1.1;}
+.splash-brand .name .kk{color:var(--brand);}
+.splash-brand .tag{font-size:12px;font-weight:500;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-top:6px;}
+.splash-bar-wrap{margin-top:48px;width:220px;animation:splashFadeIn .7s .4s ease both;}
+.splash-bar-track{height:3px;background:var(--border2);border-radius:2px;overflow:hidden;}
+.splash-bar-fill{height:100%;background:linear-gradient(90deg,var(--brand),var(--gold));border-radius:2px;width:0%;animation:loadBar 2.8s cubic-bezier(.4,0,.2,1) .3s forwards;}
+@keyframes loadBar{0%{width:0%}40%{width:45%}70%{width:72%}100%{width:100%}}
+.splash-dots{display:flex;gap:6px;margin-top:16px;justify-content:center;}
+.splash-dot{width:6px;height:6px;border-radius:50%;background:var(--border2);animation:dotPulse 1.4s ease infinite;}
+.splash-dot:nth-child(2){animation-delay:.2s;}.splash-dot:nth-child(3){animation-delay:.4s;}
+@keyframes dotPulse{0%,80%,100%{background:var(--border2)}40%{background:var(--brand)}}
+
+.topbar{background:var(--topbar-bg);padding:7px 20px;display:flex;align-items:center;justify-content:center;gap:20px;font-size:12px;font-weight:500;letter-spacing:.2px;}
+.topbar-item{display:flex;align-items:center;gap:6px;opacity:.92;}
+.topbar-item svg{width:13px;height:13px;flex-shrink:0;}
+
+nav{position:sticky;top:0;z-index:100;background:rgba(6,8,10,.97);backdrop-filter:blur(20px);border-bottom:1px solid var(--border);}
+.nav-main{padding:0 20px;height:68px;display:flex;align-items:center;gap:16px;}
+.nav-logo{display:flex;align-items:center;gap:10px;flex-shrink:0;cursor:pointer;text-decoration:none;}
+.nav-logo-icon{width:36px;height:36px;flex-shrink:0;}
+.nav-logo-text .brand{font-family:'Playfair Display',serif;font-size:18px;font-weight:900;color:var(--white);letter-spacing:-.3px;line-height:1.1;}
+.nav-logo-text .brand .kk{color:var(--brand);}
+.nav-logo-text .sub{font-size:9px;font-weight:600;color:var(--muted);letter-spacing:2.5px;text-transform:uppercase;}
+.search-wrap{flex:1;max-width:500px;position:relative;}
+.search-wrap input{width:100%;background:var(--mid);border:1.5px solid var(--border2);color:var(--text);padding:11px 44px 11px 16px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;}
+.search-wrap input:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(0,85,212,.1);}
+.search-wrap input::placeholder{color:var(--muted);}
+.search-icon{position:absolute;right:14px;top:50%;transform:translateY(-50%);color:var(--muted);}
+.search-icon svg{width:17px;height:17px;display:block;}
+.nav-actions{display:flex;align-items:center;gap:10px;margin-left:auto;flex-shrink:0;}
+.btn-nav{background:var(--mid);border:1.5px solid var(--border2);color:var(--text);padding:9px 16px;border-radius:10px;cursor:pointer;font-size:13px;font-weight:600;font-family:'Outfit',sans-serif;display:flex;align-items:center;gap:8px;transition:all .2s;white-space:nowrap;position:relative;}
+.btn-nav svg{width:16px;height:16px;flex-shrink:0;}
+.btn-nav:hover{border-color:var(--brand);color:var(--brand);}
+.btn-nav.admin:hover{border-color:var(--gold);color:var(--gold);background:rgba(212,160,23,.06);}
+.cart-badge{position:absolute;top:-7px;right:-7px;background:var(--brand);color:white;font-size:10px;font-weight:700;min-width:18px;height:18px;border-radius:9px;display:flex;align-items:center;justify-content:center;padding:0 4px;border:2px solid var(--dark);}
+.cat-scroll{display:flex;gap:8px;padding:10px 20px;overflow-x:auto;border-top:1px solid var(--border);scrollbar-width:none;}
+.cat-scroll::-webkit-scrollbar{display:none;}
+.cat-pill{flex-shrink:0;background:transparent;border:1.5px solid var(--border2);color:var(--muted);padding:6px 16px;border-radius:20px;font-size:12px;font-weight:600;cursor:pointer;transition:all .2s;white-space:nowrap;font-family:'Outfit',sans-serif;}
+.cat-pill:hover{border-color:var(--text);color:var(--text);}
+.cat-pill.active{background:var(--brand);border-color:var(--brand);color:white;}
+
+.hero{position:relative;overflow:hidden;background:var(--charcoal);border-bottom:1px solid var(--border);min-height:380px;display:flex;align-items:center;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 55% 80% at 0% 50%,var(--hero-glow) 0%,transparent 70%),radial-gradient(ellipse 40% 50% at 100% 20%,rgba(212,160,23,.07) 0%,transparent 70%);}
+.hero-lines{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.018) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.018) 1px,transparent 1px);background-size:48px 48px;mask-image:radial-gradient(ellipse at 30% 50%,black 20%,transparent 75%);}
+.hero-content{position:relative;z-index:2;padding:52px 24px;max-width:680px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,85,212,.12);border:1px solid rgba(0,85,212,.3);color:var(--brand);font-size:11px;font-weight:700;padding:5px 14px;border-radius:20px;text-transform:uppercase;letter-spacing:1.2px;margin-bottom:20px;}
+.hero-badge svg{width:12px;height:12px;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(30px,5vw,58px);font-weight:900;line-height:1.07;letter-spacing:-.5px;margin-bottom:16px;}
+.hero h1 .accent{color:var(--brand);}
+.hero h1 .light{color:var(--muted);font-weight:700;}
+.hero-desc{color:var(--muted);font-size:15px;line-height:1.65;max-width:460px;margin-bottom:28px;}
+.hero-stats{display:flex;gap:32px;flex-wrap:wrap;}
+.hero-stat .num{font-size:26px;font-weight:800;color:var(--white);}
+.hero-stat .lbl{font-size:11px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.6px;}
+
+.feed{max-width:1300px;margin:0 auto;padding:28px 20px;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
+.section-title{font-size:20px;font-weight:800;letter-spacing:-.4px;}
+.section-title span{color:var(--brand);}
+.section-count{font-size:12px;color:var(--muted);background:var(--mid);border:1px solid var(--border2);padding:4px 13px;border-radius:20px;}
+.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:14px;}
+@media(min-width:640px){.product-grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;}}
+@media(min-width:1024px){.product-grid{grid-template-columns:repeat(auto-fill,minmax(235px,1fr));}}
+.skel{background:linear-gradient(90deg,var(--mid) 25%,var(--soft) 50%,var(--mid) 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;border-radius:var(--radius);height:320px;}
+@keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+.pcard{background:var(--charcoal);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .22s cubic-bezier(.23,1,.32,1),border-color .2s,box-shadow .2s;display:flex;flex-direction:column;position:relative;}
+.pcard:hover{transform:translateY(-4px);border-color:var(--border2);box-shadow:0 16px 44px rgba(0,0,0,.6);}
+.pcard-img{width:100%;aspect-ratio:1/1;background:var(--mid);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;transition:transform .3s;}
+.pcard:hover .pcard-img{transform:scale(1.04);}
+.pcard-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform .3s, filter .4s, opacity .4s;filter:blur(8px);opacity:0;}
+.pcard-img img.loaded{filter:blur(0);opacity:1;}
+.pcard:hover .pcard-img img{transform:scale(1.07);}
+.pcard-no-img{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted2);}
+.pcard-no-img svg{width:40px;height:40px;opacity:.4;}
+.pcard-no-img span{font-size:11px;opacity:.5;}
+.promo-badge{position:absolute;top:10px;left:10px;background:var(--brand);color:white;font-size:10px;font-weight:800;padding:3px 10px;border-radius:5px;letter-spacing:.3px;z-index:2;}
+.pcard-body{padding:14px;flex:1;display:flex;flex-direction:column;}
+.pcard-name{font-size:13.5px;font-weight:700;line-height:1.3;margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
+.pcard-desc{font-size:11.5px;color:var(--muted);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px;flex:1;}
+.pcard-price{font-size:18px;font-weight:800;color:var(--brand);margin-bottom:10px;}
+.pcard-price .cur{font-size:11px;color:var(--muted);font-weight:500;margin-left:3px;}
+.pcard-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;}
+.stock-tag{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px;display:flex;align-items:center;gap:5px;}
+.stock-tag svg{width:8px;height:8px;flex-shrink:0;}
+.in-stock{color:var(--green);background:rgba(26,158,92,.1);border:1px solid rgba(26,158,92,.25);}
+.low-stock{color:var(--gold);background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.25);}
+.no-stock{color:#E05555;background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.25);}
+.btn-add{background:var(--brand);color:white;border:none;padding:8px 15px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .18s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
+.btn-add svg{width:13px;height:13px;}
+.btn-add:hover{background:var(--brand2);transform:scale(1.05);}
+.empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);}
+.empty-state svg{width:56px;height:56px;margin:0 auto 16px;opacity:.3;}
+.empty-state h3{font-size:18px;font-weight:700;margin-bottom:6px;color:var(--text);}
+
+.overlay{position:fixed;inset:0;background:rgba(0,0,0,.78);z-index:200;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(4px);}
+.overlay.show{opacity:1;pointer-events:all;}
+.cart-drawer{position:fixed;top:0;right:-430px;width:min(430px,100vw);height:100dvh;background:var(--charcoal);border-left:1.5px solid var(--border2);z-index:201;transition:right .32s cubic-bezier(.23,1,.32,1);display:flex;flex-direction:column;box-shadow:-10px 0 48px rgba(0,0,0,.6);}
+.cart-drawer.show{right:0;}
+.drawer-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.drawer-head h3{font-size:17px;font-weight:800;display:flex;align-items:center;gap:10px;}
+.drawer-head h3 svg{width:20px;height:20px;color:var(--brand);}
+.btn-close{background:var(--soft);border:none;color:var(--muted);width:34px;height:34px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .2s;}
+.btn-close svg{width:16px;height:16px;}
+.btn-close:hover{background:var(--border2);color:var(--text);}
+.drawer-body{flex:1;overflow-y:auto;padding:14px;}
+.cart-empty-state{height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;color:var(--muted);gap:12px;text-align:center;padding:40px;}
+.cart-empty-state svg{width:56px;height:56px;opacity:.25;}
+.cart-empty-state p{font-size:15px;font-weight:600;}
+.cart-empty-state small{font-size:12px;color:var(--muted2);}
+.cart-item-card{background:var(--mid);border:1px solid var(--border);border-radius:12px;padding:12px;display:flex;gap:10px;align-items:flex-start;margin-bottom:10px;}
+.ci-thumb{width:54px;height:54px;border-radius:9px;background:var(--soft);flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.ci-thumb img{width:100%;height:100%;object-fit:cover;}
+.ci-thumb svg{width:24px;height:24px;color:var(--muted2);}
+.ci-info{flex:1;min-width:0;}
+.ci-name{font-size:13px;font-weight:700;line-height:1.3;margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.ci-unit{font-size:11px;color:var(--muted);margin-bottom:8px;}
+.qty-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;}
+.qty-btn{background:var(--soft);border:1px solid var(--border2);color:var(--text);width:28px;height:28px;border-radius:7px;cursor:pointer;font-size:16px;font-weight:700;display:flex;align-items:center;justify-content:center;transition:all .15s;}
+.qty-btn:hover{background:var(--brand);border-color:var(--brand);color:white;}
+.qty-val{font-size:14px;font-weight:700;min-width:28px;text-align:center;}
+.ci-price{font-size:15px;font-weight:800;color:var(--brand);}
+.ci-del{background:transparent;border:none;color:var(--muted2);cursor:pointer;padding:4px;border-radius:6px;transition:all .2s;flex-shrink:0;align-self:flex-start;display:flex;}
+.ci-del svg{width:16px;height:16px;}
+.ci-del:hover{color:#E05555;background:rgba(224,85,85,.1);}
+.drawer-foot{padding:18px 20px;border-top:1.5px solid var(--border);background:var(--mid);}
+.cart-subtotal{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:6px;}
+.cart-grand{display:flex;justify-content:space-between;font-size:19px;font-weight:800;margin-bottom:16px;}
+.cart-grand span:last-child{color:var(--brand);}
+.btn-checkout{width:100%;background:var(--brand);color:white;border:none;padding:15px;border-radius:11px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-checkout svg{width:17px;height:17px;}
+.btn-checkout:hover{background:var(--brand2);transform:translateY(-1px);}
+
+.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:300;display:flex;align-items:center;justify-content:center;padding:16px;opacity:0;pointer-events:none;transition:opacity .28s;backdrop-filter:blur(8px);}
+.modal-bg.show{opacity:1;pointer-events:all;}
+.modal-box{background:var(--charcoal);border:1.5px solid var(--border2);border-radius:18px;width:100%;max-width:480px;max-height:92dvh;overflow-y:auto;transform:scale(.94) translateY(10px);transition:transform .28s cubic-bezier(.23,1,.32,1);box-shadow:var(--shadow);}
+.modal-bg.show .modal-box{transform:scale(1) translateY(0);}
+.modal-head{padding:20px 22px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:var(--charcoal);z-index:1;}
+.modal-head h3{font-size:17px;font-weight:800;display:flex;align-items:center;gap:10px;}
+.modal-head h3 svg{width:20px;height:20px;color:var(--brand);}
+.modal-body{padding:22px;}
+.fg{margin-bottom:16px;}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:7px;}
+.fg input,.fg select,.fg textarea{width:100%;background:var(--mid);border:1.5px solid var(--border2);color:var(--text);padding:12px 14px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:14px;outline:none;transition:border-color .2s,box-shadow .2s;}
+.fg input:focus,.fg select:focus,.fg textarea:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(0,85,212,.1);}
+.fg select option{background:var(--mid);}
+.fg-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.order-recap{background:var(--mid);border:1px solid var(--border2);border-radius:12px;padding:16px;margin-bottom:20px;}
+.order-recap h4{font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:12px;}
+.recap-line{display:flex;justify-content:space-between;align-items:center;font-size:13px;padding:5px 0;gap:8px;}
+.recap-thumb{width:28px;height:28px;border-radius:6px;background:var(--soft);flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.recap-thumb img{width:100%;height:100%;object-fit:cover;}
+.recap-thumb svg{width:14px;height:14px;color:var(--muted2);}
+.recap-total{display:flex;justify-content:space-between;font-size:16px;font-weight:800;border-top:1px solid var(--border2);padding-top:12px;margin-top:8px;}
+.recap-total span:last-child{color:var(--brand);}
+.btn-confirm{width:100%;background:var(--brand);color:white;border:none;padding:15px;border-radius:11px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-confirm svg{width:17px;height:17px;}
+.btn-confirm:hover{background:var(--brand2);}
+.btn-confirm:disabled{background:#2a2a2a;color:#555;cursor:not-allowed;}
+.divider-or{text-align:center;color:var(--muted2);font-size:12px;margin:14px 0;position:relative;}
+.divider-or::before,.divider-or::after{content:'';position:absolute;top:50%;width:44%;height:1px;background:var(--border2);}
+.divider-or::before{left:0;}.divider-or::after{right:0;}
+.btn-whatsapp{width:100%;background:#1A7A45;color:white;border:none;padding:14px;border-radius:11px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-whatsapp svg{width:17px;height:17px;}
+.btn-whatsapp:hover{background:#166038;}
+.success-box{text-align:center;padding:44px 28px;}
+.success-icon-wrap{width:80px;height:80px;border-radius:50%;background:rgba(26,158,92,.12);border:2px solid rgba(26,158,92,.3);display:flex;align-items:center;justify-content:center;margin:0 auto 20px;animation:successPop .5s cubic-bezier(.175,.885,.32,1.275);}
+@keyframes successPop{from{transform:scale(0)}to{transform:scale(1)}}
+.success-icon-wrap svg{width:38px;height:38px;color:var(--green);}
+.success-box h3{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;margin-bottom:10px;}
+.success-box p{color:var(--muted);font-size:14px;line-height:1.6;}
+.success-box .highlight{color:var(--green);font-weight:700;margin-top:12px;font-size:13px;}
+.btn-continue{margin-top:24px;background:var(--brand);color:white;border:none;padding:12px 32px;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
+.btn-continue:hover{background:var(--brand2);}
+
+.admin-panel{position:fixed;inset:0;background:var(--dark);z-index:400;display:none;flex-direction:column;}
+.admin-panel.show{display:flex;}
+.admin-topbar{background:var(--charcoal);border-bottom:1.5px solid var(--border2);padding:0 20px;height:62px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;}
+.admin-logo{display:flex;align-items:center;gap:10px;}
+.admin-logo svg{width:28px;height:28px;}
+.admin-logo-txt{font-family:'Playfair Display',serif;font-size:16px;font-weight:900;}
+.admin-logo-txt .kk{color:var(--brand);}
+.admin-logo-sub{font-size:10px;color:var(--gold);font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-left:2px;}
+.btn-logout{background:transparent;border:1.5px solid var(--border2);color:var(--muted);padding:7px 16px;border-radius:8px;cursor:pointer;font-size:13px;font-family:'Outfit',sans-serif;transition:all .2s;display:flex;align-items:center;gap:7px;}
+.btn-logout svg{width:15px;height:15px;}
+.btn-logout:hover{border-color:#E05555;color:#E05555;}
+.admin-content{display:flex;flex:1;overflow:hidden;}
+.admin-sidebar{width:210px;background:var(--charcoal);border-right:1px solid var(--border);padding:16px 12px;flex-shrink:0;display:flex;flex-direction:column;gap:4px;}
+.side-btn{background:transparent;border:none;color:var(--muted);padding:10px 14px;border-radius:9px;cursor:pointer;font-size:13px;font-family:'Outfit',sans-serif;text-align:left;transition:all .2s;display:flex;align-items:center;gap:10px;font-weight:500;}
+.side-btn svg{width:16px;height:16px;flex-shrink:0;}
+.side-btn span{display:block;}
+.side-btn:hover{background:var(--mid);color:var(--text);}
+.side-btn.active{background:rgba(212,160,23,.1);color:var(--gold);font-weight:700;}
+.admin-main{flex:1;overflow-y:auto;padding:24px;}
+.admin-sec{display:none;}.admin-sec.show{display:block;}
+.a-card{background:var(--charcoal);border:1.5px solid var(--border);border-radius:var(--radius);padding:22px;margin-bottom:18px;}
+.a-card h3{font-size:15px;font-weight:800;padding-bottom:14px;margin-bottom:18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;}
+.a-card h3 svg{width:16px;height:16px;color:var(--brand);}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:12px;margin-bottom:20px;}
+.stat-tile{background:var(--mid);border:1px solid var(--border2);border-radius:12px;padding:18px 16px;text-align:center;}
+.stat-tile .n{font-size:26px;font-weight:800;color:var(--brand);}
+.stat-tile .l{font-size:11px;color:var(--muted);margin-top:4px;text-transform:uppercase;letter-spacing:.5px;}
+.prod-admin-list{display:flex;flex-direction:column;gap:10px;}
+.prod-admin-row{background:var(--mid);border:1px solid var(--border2);border-radius:11px;padding:12px 14px;display:flex;gap:12px;align-items:center;}
+.par-thumb{width:52px;height:52px;border-radius:10px;background:var(--soft);flex-shrink:0;display:flex;align-items:center;justify-content:center;overflow:hidden;}
+.par-thumb img{width:100%;height:100%;object-fit:cover;}
+.par-thumb svg{width:22px;height:22px;color:var(--muted2);}
+.par-info{flex:1;min-width:0;}
+.par-info h4{font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.par-info .meta{font-size:12px;color:var(--muted);margin-top:2px;}
+.par-info .plbl{font-size:14px;color:var(--brand);font-weight:800;margin-top:4px;}
+.par-actions{display:flex;gap:7px;flex-shrink:0;}
+.btn-edit{background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.3);color:var(--gold);padding:7px 13px;border-radius:7px;font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:600;transition:all .2s;display:flex;align-items:center;gap:5px;}
+.btn-edit svg{width:13px;height:13px;}
+.btn-del{background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.3);color:#E05555;padding:7px 13px;border-radius:7px;font-size:12px;cursor:pointer;font-family:'Outfit',sans-serif;font-weight:600;transition:all .2s;display:flex;align-items:center;gap:5px;}
+.btn-del svg{width:13px;height:13px;}
+.btn-edit:hover{background:rgba(212,160,23,.2);}
+.btn-del:hover{background:rgba(224,85,85,.2);}
+.order-row{background:var(--mid);border:1px solid var(--border2);border-radius:11px;padding:16px;margin-bottom:10px;}
+.order-row-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;}
+.order-row-head strong{font-size:15px;display:flex;align-items:center;gap:8px;}
+.order-row-head strong svg{width:16px;height:16px;color:var(--muted);}
+.status-pill{font-size:11px;font-weight:700;padding:4px 11px;border-radius:20px;}
+.s-new{background:rgba(26,158,92,.12);color:var(--green);border:1px solid rgba(26,158,92,.3);}
+.s-prep{background:rgba(0,102,255,.12);color:#4d94ff;border:1px solid rgba(0,102,255,.3);}
+.s-sent{background:rgba(212,160,23,.12);color:var(--gold);border:1px solid rgba(212,160,23,.3);}
+.s-done{background:rgba(26,158,92,.2);color:var(--green);border:1px solid rgba(26,158,92,.4);}
+.s-cancel{background:rgba(224,85,85,.12);color:#E05555;border:1px solid rgba(224,85,85,.3);}
+.order-detail{font-size:12px;color:var(--muted);margin-bottom:3px;display:flex;align-items:center;gap:7px;}
+.order-detail svg{width:13px;height:13px;flex-shrink:0;}
+.order-total-row{font-size:15px;color:var(--brand);font-weight:800;margin-top:8px;}
+.status-sel{background:var(--soft);border:1px solid var(--border2);color:var(--text);padding:6px 10px;border-radius:7px;font-size:12px;font-family:'Outfit',sans-serif;margin-top:10px;width:100%;outline:none;}
+.afg{margin-bottom:14px;}
+.afg label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
+.afg input,.afg select,.afg textarea{width:100%;background:var(--mid);border:1.5px solid var(--border2);color:var(--text);padding:11px 13px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color .2s;}
+.afg input:focus,.afg select:focus,.afg textarea:focus{border-color:var(--gold);}
+.afg textarea{resize:vertical;min-height:78px;line-height:1.5;}
+.afg select option{background:var(--mid);}
+.afr{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.photo-upload-area{border:2px dashed var(--border2);border-radius:12px;padding:24px;text-align:center;cursor:pointer;transition:all .2s;position:relative;background:var(--mid);}
+.photo-upload-area:hover{border-color:var(--gold);background:rgba(212,160,23,.04);}
+.photo-upload-area.has-photo{border-style:solid;border-color:var(--green2);padding:0;overflow:hidden;}
+.photo-upload-area input[type=file]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.upload-icon-wrap{margin-bottom:10px;}
+.upload-icon-wrap svg{width:36px;height:36px;color:var(--muted2);}
+.upload-text{font-size:13px;color:var(--muted);line-height:1.5;}
+.upload-hint{font-size:11px;color:var(--muted2);margin-top:4px;}
+.photo-preview{width:100%;height:200px;object-fit:cover;display:block;border-radius:10px;}
+.photo-preview-wrap{position:relative;}
+.remove-photo{position:absolute;top:8px;right:8px;background:rgba(0,0,0,.75);border:none;color:white;width:30px;height:30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:2;transition:background .2s;}
+.remove-photo svg{width:14px;height:14px;}
+.remove-photo:hover{background:var(--brand);}
+.upload-progress{margin-top:8px;background:var(--soft);border-radius:4px;height:4px;overflow:hidden;display:none;}
+.upload-progress-bar{height:100%;background:var(--gold);border-radius:4px;width:0%;transition:width .3s;}
+.btn-save{background:var(--gold);color:var(--dark);border:none;padding:11px 26px;border-radius:9px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;display:flex;align-items:center;gap:7px;}
+.btn-save svg{width:15px;height:15px;}
+.btn-save:hover{background:var(--gold2);transform:translateY(-1px);}
+.btn-save:disabled{background:#2a2a2a;color:#555;cursor:not-allowed;transform:none;}
+.btn-cancel-edit{background:transparent;border:1.5px solid var(--border2);color:var(--muted);padding:11px 22px;border-radius:9px;font-size:13px;font-family:'Outfit',sans-serif;cursor:pointer;transition:all .2s;}
+.btn-cancel-edit:hover{border-color:#E05555;color:#E05555;}
+.admin-login-wrap{display:flex;flex:1;align-items:center;justify-content:center;padding:40px 20px;}
+.admin-login-box{width:100%;max-width:360px;text-align:center;}
+.login-logo{display:flex;flex-direction:column;align-items:center;gap:12px;margin-bottom:28px;}
+.login-logo svg{width:64px;height:64px;}
+.login-logo-name{font-family:'Playfair Display',serif;font-size:24px;font-weight:900;}
+.login-logo-name .kk{color:var(--brand);}
+.login-logo-sub{font-size:11px;color:var(--gold);font-weight:600;letter-spacing:2px;text-transform:uppercase;}
+.login-field{width:100%;background:var(--mid);border:1.5px solid var(--border2);color:var(--text);padding:13px 16px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:14px;outline:none;margin-bottom:12px;transition:border-color .2s;display:block;}
+.login-field:focus{border-color:var(--gold);}
+.btn-enter{width:100%;background:var(--brand);color:white;border:none;padding:13px;border-radius:10px;font-size:15px;font-weight:800;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-enter svg{width:17px;height:17px;}
+.btn-enter:hover{background:var(--brand2);}
+.login-err{color:#E05555;font-size:12px;margin-bottom:10px;display:none;text-align:left;}
+.login-hint{font-size:11px;color:var(--muted2);margin-top:14px;}
+
+.theme-switcher{position:fixed;bottom:24px;right:24px;z-index:150;display:flex;flex-direction:column;gap:8px;align-items:flex-end;}
+.theme-toggle-btn{background:var(--charcoal);border:1.5px solid var(--border2);color:var(--text);width:44px;height:44px;border-radius:50%;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 16px rgba(0,0,0,.4);transition:all .2s;}
+.theme-toggle-btn:hover{border-color:var(--brand);transform:scale(1.1);}
+.theme-panel{background:var(--charcoal);border:1.5px solid var(--border2);border-radius:14px;padding:14px;display:none;flex-direction:column;gap:8px;box-shadow:var(--shadow);min-width:180px;}
+.theme-panel.open{display:flex;}
+.theme-panel-title{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;}
+.theme-opt{display:flex;align-items:center;gap:10px;background:var(--mid);border:1.5px solid var(--border2);color:var(--text);padding:9px 14px;border-radius:9px;cursor:pointer;font-size:13px;font-weight:600;font-family:'Outfit',sans-serif;transition:all .2s;width:100%;text-align:left;}
+.theme-opt:hover{border-color:var(--brand);color:var(--brand);}
+.theme-opt.active{background:rgba(0,85,212,.12);border-color:var(--brand);color:var(--brand);}
+.theme-opt .dot{width:14px;height:14px;border-radius:50%;flex-shrink:0;border:2px solid rgba(255,255,255,.2);}
+.dot-default{background:linear-gradient(135deg,#0055D4,#0F1215);}
+.dot-white{background:linear-gradient(135deg,#0055D4,#FFFFFF);border-color:rgba(0,0,0,.15)!important;}
+.dot-dark{background:linear-gradient(135deg,#2979FF,#000000);}
+
+footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36px 20px;}
+.footer-inner{max-width:1300px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;}
+.footer-logo{display:flex;align-items:center;gap:10px;}
+.footer-logo svg{width:30px;height:30px;}
+.footer-logo-text .name{font-family:'Playfair Display',serif;font-size:16px;font-weight:900;}
+.footer-logo-text .name .kk{color:var(--brand);}
+.footer-logo-text .sub{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
+.footer-info{font-size:12px;color:var(--muted);text-align:right;line-height:1.7;}
+
+/* ── BOTÃO AJUDA ── */
+.help-btn {
+  position:fixed;bottom:84px;left:24px;z-index:150;
+  width:48px;height:48px;border-radius:50%;
+  background:linear-gradient(135deg,var(--gold),var(--gold2));
+  border:none;cursor:pointer;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 4px 20px rgba(212,160,23,.45);
+  transition:all .25s;
+  animation:helpPulse 3s ease infinite;
+}
+.help-btn:hover{transform:scale(1.12);box-shadow:0 6px 28px rgba(212,160,23,.6);}
+.help-btn svg{width:22px;height:22px;color:#000;flex-shrink:0;}
+@keyframes helpPulse{0%,100%{box-shadow:0 4px 20px rgba(212,160,23,.45)}50%{box-shadow:0 4px 32px rgba(212,160,23,.75)}}
+
+/* ── MODAL AJUDA ── */
+.help-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;display:flex;align-items:flex-end;justify-content:center;padding:0;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(10px);}
+.help-modal-bg.show{opacity:1;pointer-events:all;}
+@media(min-width:600px){.help-modal-bg{align-items:center;padding:20px;}}
+.help-modal{background:var(--charcoal);border:1.5px solid var(--border2);border-radius:22px 22px 0 0;width:100%;max-width:620px;max-height:92dvh;overflow-y:auto;transform:translateY(40px);transition:transform .32s cubic-bezier(.23,1,.32,1);box-shadow:var(--shadow);}
+@media(min-width:600px){.help-modal{border-radius:22px;transform:scale(.95) translateY(10px);}}
+.help-modal-bg.show .help-modal{transform:translateY(0);}
+@media(min-width:600px){.help-modal-bg.show .help-modal{transform:scale(1) translateY(0);}}
+.help-drag{width:40px;height:4px;background:var(--border2);border-radius:2px;margin:14px auto 0;}
+@media(min-width:600px){.help-drag{display:none;}}
+.help-head{padding:20px 24px 0;display:flex;align-items:center;justify-content:space-between;}
+.help-head-logo{display:flex;align-items:center;gap:12px;}
+.help-head-logo svg{width:44px;height:44px;flex-shrink:0;}
+.help-head-title{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;line-height:1.1;}
+.help-head-title .kk{color:var(--brand);}
+.help-head-sub{font-size:10px;color:var(--gold);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+.help-body{padding:20px 24px 32px;}
+.help-section{margin-bottom:24px;}
+.help-section:last-child{margin-bottom:0;}
+.help-section-title{font-size:11px;font-weight:800;color:var(--gold);text-transform:uppercase;letter-spacing:1.5px;margin-bottom:12px;display:flex;align-items:center;gap:8px;}
+.help-section-title svg{width:14px;height:14px;}
+.help-section-title::after{content:'';flex:1;height:1px;background:var(--border2);}
+.help-about-text{font-size:14px;color:var(--muted);line-height:1.75;}
+.help-about-text strong{color:var(--text);}
+.help-flags{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;}
+.help-flag{background:var(--mid);border:1px solid var(--border2);border-radius:20px;padding:5px 13px;font-size:12px;font-weight:600;display:flex;align-items:center;gap:6px;}
+.help-flag span{font-size:15px;}
+.help-features{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+@media(max-width:420px){.help-features{grid-template-columns:1fr;}}
+.help-feature{background:var(--mid);border:1px solid var(--border2);border-radius:12px;padding:14px;display:flex;gap:10px;align-items:flex-start;}
+.help-feature-ico{width:34px;height:34px;border-radius:9px;background:rgba(0,85,212,.12);border:1px solid rgba(0,85,212,.2);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.help-feature-ico svg{width:16px;height:16px;color:var(--brand);}
+.help-feature-txt h4{font-size:12px;font-weight:800;margin-bottom:3px;}
+.help-feature-txt p{font-size:11px;color:var(--muted);line-height:1.4;}
+.help-contacts{display:flex;flex-direction:column;gap:9px;}
+.help-contact-row{background:var(--mid);border:1px solid var(--border2);border-radius:10px;padding:11px 14px;display:flex;align-items:center;gap:10px;font-size:13px;}
+.help-contact-row svg{width:16px;height:16px;color:var(--brand);flex-shrink:0;}
+.help-contact-row strong{margin-right:6px;}
+.help-contact-row a{color:var(--brand);text-decoration:none;}
+.help-provinces{display:flex;flex-wrap:wrap;gap:6px;}
+.help-prov{background:var(--mid);border:1px solid var(--border2);border-radius:6px;padding:4px 10px;font-size:11px;color:var(--muted);font-weight:600;}
+.help-banner{background:linear-gradient(135deg,rgba(0,85,212,.15),rgba(212,160,23,.08));border:1px solid rgba(212,160,23,.25);border-radius:14px;padding:18px;text-align:center;margin-top:4px;}
+.help-banner p{font-size:13px;color:var(--text);line-height:1.65;}
+.help-banner strong{color:var(--gold);}
+.help-close-btn{width:100%;background:var(--brand);color:white;border:none;padding:14px;border-radius:11px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;margin-top:20px;}
+.help-close-btn:hover{background:var(--brand2);}
+
+.toast{position:fixed;bottom:90px;left:50%;transform:translateX(-50%) translateY(16px);background:var(--charcoal);border:1.5px solid var(--border2);padding:11px 22px;border-radius:10px;font-size:13px;font-weight:600;z-index:600;opacity:0;transition:all .28s;white-space:nowrap;box-shadow:var(--shadow);pointer-events:none;display:flex;align-items:center;gap:8px;}
+.toast svg{width:16px;height:16px;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.success{border-left:3px solid var(--green);}
+.toast.error{border-left:3px solid #E05555;}
+.spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.25);border-top-color:white;border-radius:50%;animation:spin .65s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg)}}
+@media(max-width:640px){
+  .admin-sidebar{width:54px;}
+  .side-btn span{display:none;}
+  .admin-main{padding:14px;}
+  .afr{grid-template-columns:1fr;}
+  .footer-info{text-align:left;}
+}
+</style>
+</head>
+<body>
+
+<div id="splash">
+  <div class="splash-logo-wrap">
+    <svg class="splash-icon" viewBox="0 0 96 96" fill="none">
+      <rect width="96" height="96" rx="22" fill="#0055D4"/>
+      <rect x="22" y="20" width="9" height="56" rx="3" fill="white"/>
+      <path d="M31 48 L58 20 L70 20 L45 48 L70 76 L58 76 Z" fill="white"/>
+      <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
+    </svg>
+    <div class="splash-brand">
+      <div class="name"><span class="kk">Kak</span>weia</div>
+      <div class="tag">Comercial &nbsp;·&nbsp; Angola</div>
+    </div>
+  </div>
+  <div class="splash-bar-wrap">
+    <div class="splash-bar-track"><div class="splash-bar-fill"></div></div>
+    <div class="splash-dots">
+      <div class="splash-dot"></div>
+      <div class="splash-dot"></div>
+      <div class="splash-dot"></div>
+    </div>
+  </div>
+</div>
+
+<div class="topbar">
+  <div class="topbar-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+    <span>Entrega em toda Angola</span>
+  </div>
+  <div class="topbar-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3"/></svg>
+    <span>Contacte pelo WhatsApp</span>
+  </div>
+  <div class="topbar-item">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <span>Compra Segura</span>
+  </div>
+</div>
+
+<nav>
+  <div class="nav-main">
+    <a class="nav-logo" id="navLogo" onclick="logoClick()">
+      <svg class="nav-logo-icon" viewBox="0 0 96 96" fill="none">
+        <rect width="96" height="96" rx="20" fill="#0055D4"/>
+        <rect x="22" y="20" width="9" height="56" rx="3" fill="white"/>
+        <path d="M31 48 L58 20 L70 20 L45 48 L70 76 L58 76 Z" fill="white"/>
+        <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
+      </svg>
+      <div class="nav-logo-text">
+        <div class="brand"><span class="kk">Kak</span>weia</div>
+        <div class="sub">Comercial</div>
+      </div>
+    </a>
+    <div class="search-wrap">
+      <input type="text" id="searchInput" placeholder="Pesquisar produtos..." oninput="filterProducts()">
+      <span class="search-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+      </span>
+    </div>
+    <div class="nav-actions">
+      <button class="btn-nav" onclick="toggleCart()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+        <span>Carrinho</span>
+        <span class="cart-badge" id="cartBadge">0</span>
+      </button>
+    </div>
+  </div>
+  <div class="cat-scroll" id="catScroll"></div>
+</nav>
+
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-lines"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+      Kakweia Comercial — Angola
+    </div>
+    <h1>Qualidade,<br><span class="accent">variedade</span><br><span class="light">ao seu alcance</span></h1>
+    <p class="hero-desc">Os melhores produtos com os melhores preços. Electrónica, Moda, Casa e muito mais — entregamos em toda Angola.</p>
+    <div class="hero-stats">
+      <div class="hero-stat"><div class="num" id="heroProds">—</div><div class="lbl">Produtos</div></div>
+      <div class="hero-stat"><div class="num">18</div><div class="lbl">Províncias</div></div>
+      <div class="hero-stat"><div class="num" id="heroOrds">—</div><div class="lbl">Pedidos</div></div>
+    </div>
+  </div>
+</section>
+
+<main class="feed">
+  <div class="section-header">
+    <h2 class="section-title">Produtos <span>em Destaque</span></h2>
+    <span class="section-count" id="prodCount">A carregar...</span>
+  </div>
+  <div class="product-grid" id="productGrid">
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+    <div class="skel"></div><div class="skel"></div><div class="skel"></div>
+  </div>
+</main>
+
+<footer>
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <svg viewBox="0 0 96 96" fill="none">
+        <rect width="96" height="96" rx="20" fill="#0055D4"/>
+        <rect x="22" y="20" width="9" height="56" rx="3" fill="white"/>
+        <path d="M31 48 L58 20 L70 20 L45 48 L70 76 L58 76 Z" fill="white"/>
+        <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
+      </svg>
+      <div class="footer-logo-text">
+        <div class="name"><span class="kk">Kak</span>weia</div>
+        <div class="sub">Comercial</div>
+      </div>
+    </div>
+    <div class="footer-info">
+      <div>© 2026 Kakweia Comercial — Todos os direitos reservados</div>
+      <div>Loja Online Angola · Pagamento na entrega · Entrega em todo o país</div>
+    </div>
+  </div>
+</footer>
+
+<div class="overlay" id="overlay" onclick="toggleCart()"></div>
+<aside class="cart-drawer" id="cartDrawer">
+  <div class="drawer-head">
+    <h3>
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+      Meu Carrinho
+    </h3>
+    <button class="btn-close" onclick="toggleCart()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="cartBody"></div>
+  <div class="drawer-foot" id="cartFoot" style="display:none">
+    <div class="cart-subtotal"><span>Subtotal</span><span id="cartSub">0 Kz</span></div>
+    <div class="cart-grand"><span>Total</span><span id="cartGrand">0 Kz</span></div>
+    <button class="btn-checkout" onclick="openCheckout()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      Finalizar Compra
+    </button>
+  </div>
+</aside>
+
+<div class="modal-bg" id="modalCheckout">
+  <div class="modal-box">
+    <div class="modal-head">
+      <h3>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+        Finalizar Pedido
+      </h3>
+      <button class="btn-close" onclick="closeModal('modalCheckout')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="order-recap" id="orderRecap"></div>
+      <div class="fg"><label>Nome Completo *</label><input type="text" id="cName" placeholder="Ex: João Manuel Silva"></div>
+      <div class="fg-row">
+        <div class="fg">
+          <label>Província *</label>
+          <select id="cProv">
+            <option value="">Selecionar...</option>
+            <option>Luanda</option><option>Benguela</option><option>Huambo</option>
+            <option>Bié</option><option>Cabinda</option><option>Cuando Cubango</option>
+            <option>Cunene</option><option>Huíla</option><option>Kwanza Norte</option>
+            <option>Kwanza Sul</option><option>Lunda Norte</option><option>Lunda Sul</option>
+            <option>Malanje</option><option>Moxico</option><option>Namibe</option>
+            <option>Uíge</option><option>Zaire</option>
+          </select>
+        </div>
+        <div class="fg"><label>Município *</label><input type="text" id="cMun" placeholder="Ex: Cacuaco"></div>
+      </div>
+      <div class="fg"><label>Número WhatsApp *</label><input type="tel" id="cWA" placeholder="Tel"></div>
+      <div class="fg"><label>Endereço / Bairro / Referência</label><input type="text" id="cAddr" placeholder="Bairro, rua, casa nº..."></div>
+      <button class="btn-confirm" id="btnConfirm" onclick="submitOrder()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+        Confirmar Pedido
+      </button>
+      <div class="divider-or">ou</div>
+      <button class="btn-whatsapp" onclick="sendWhatsApp()">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+        Enviar Pedido pelo WhatsApp
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="modalSuccess">
+  <div class="modal-box">
+    <div class="success-box">
+      <div class="success-icon-wrap">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
+      </div>
+      <h3>Pedido Confirmado!</h3>
+      <p>Obrigado pela sua confiança na Kakweia Comercial. A nossa equipa irá entrar em contacto consigo em breve para confirmar a entrega.</p>
+      <p class="highlight">Será contactado pelo WhatsApp em breve.</p>
+      <button class="btn-continue" onclick="closeModal('modalSuccess')">Continuar a Comprar</button>
+    </div>
+  </div>
+</div>
+
+<div class="admin-panel" id="adminPanel">
+  <div id="adminLoginWrap" style="display:flex;flex-direction:column;flex:1;">
+    <div class="admin-topbar">
+      <div class="admin-logo">
+        <svg width="28" height="28" viewBox="0 0 96 96" fill="none">
+          <rect width="96" height="96" rx="20" fill="#0055D4"/>
+          <rect x="22" y="20" width="9" height="56" rx="3" fill="white"/>
+          <path d="M31 48 L58 20 L70 20 L45 48 L70 76 L58 76 Z" fill="white"/>
+          <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
+        </svg>
+        <div>
+          <div class="admin-logo-txt"><span class="kk">Kak</span>weia</div>
+          <div class="admin-logo-sub">Admin</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="closeAdmin()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"/></svg>
+        Fechar
+      </button>
+    </div>
+    <div class="admin-login-wrap">
+      <div class="admin-login-box">
+        <div class="login-logo">
+          <svg width="64" height="64" viewBox="0 0 96 96" fill="none">
+            <rect width="96" height="96" rx="22" fill="#0055D4"/>
+            <rect x="22" y="20" width="9" height="56" rx="3" fill="white"/>
+            <path d="M31 48 L58 20 L70 20 L45 48 L70 76 L58 76 Z" fill="white"/>
+            <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
+          </svg>
+          <div class="login-logo-name"><span class="kk">Kak</span>weia Comercial</div>
+          <div class="login-logo-sub">Painel Administrativo</div>
+        </div>
+        <input class="login-field" type="text" id="aUser" placeholder="Utilizador" autocomplete="off">
+        <input class="login-field" type="password" id="aPass" placeholder="Palavra-passe" onkeydown="if(event.key==='Enter')doLogin()">
+        <div class="login-err" id="loginErr">Credenciais inválidas. Tente novamente.</div>
+        <button class="btn-enter" onclick="doLogin()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10,17 15,12 10,7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Entrar no Painel
+        </button>
+        <p class="login-hint">Demo: <b>admin</b> / <b>angola2025</b></p>
+      </div>
+    </div>
+  </div>
+
+  <div id="adminDash" style="display:none;flex-direction:column;flex:1;">
+    <div class="admin-topbar">
+      <div class="admin-logo">
+        <svg width="28" height="28" viewBox="0 0 96 96" fill="none">
+          <rect width="96" height="96" rx="20" fill="#0055D4"/>
+          <rect x="22" y="20" width="9" height="56" rx="3" fill="white"/>
+          <path d="M31 48 L58 20 L70 20 L45 48 L70 76 L58 76 Z" fill="white"/>
+          <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
+        </svg>
+        <div>
+          <div class="admin-logo-txt"><span class="kk">Kak</span>weia</div>
+          <div class="admin-logo-sub">Admin</div>
+        </div>
+      </div>
+      <button class="btn-logout" onclick="logoutAdmin()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16,17 21,12 16,7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Sair
+      </button>
+    </div>
+    <div class="admin-content">
+      <div class="admin-sidebar">
+        <button class="side-btn active" onclick="switchSec('secStats',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          <span>Estatísticas</span>
+        </button>
+        <button class="side-btn" onclick="switchSec('secProds',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>
+          <span>Produtos</span>
+        </button>
+        <button class="side-btn" onclick="switchSec('secAdd',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+          <span>Adicionar</span>
+        </button>
+        <button class="side-btn" onclick="switchSec('secOrders',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/><line x1="9" y1="13" x2="15" y2="13"/><line x1="9" y1="17" x2="15" y2="17"/></svg>
+          <span>Pedidos</span>
+        </button>
+        <button class="side-btn" onclick="switchSec('secStore',this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M21 12h-1M4 12H3M12 21v-1M12 4V3"/></svg>
+          <span>Loja</span>
+        </button>
+      </div>
+      <div class="admin-main">
+        <div class="admin-sec show" id="secStats">
+          <div class="stats-row" id="statsRow"></div>
+          <div class="a-card">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg> Stock por Produto</h3>
+            <div id="statsProds"></div>
+          </div>
+        </div>
+        <div class="admin-sec" id="secProds">
+          <div class="a-card">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg> Gerir Produtos</h3>
+            <div class="prod-admin-list" id="adminProdList"></div>
+          </div>
+        </div>
+        <div class="admin-sec" id="secAdd">
+          <div class="a-card">
+            <h3 id="addTitle">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+              Adicionar Novo Produto
+            </h3>
+            <input type="hidden" id="editId">
+            <input type="hidden" id="existingImg">
+            <div class="afg">
+              <label>Fotografia do Produto</label>
+              <div class="photo-upload-area" id="uploadArea">
+                <input type="file" id="photoFile" accept="image/*" onchange="previewPhoto(event)">
+                <div id="uploadPlaceholder">
+                  <div class="upload-icon-wrap">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>
+                  </div>
+                  <div class="upload-text">Clica ou arrasta a fotografia aqui<br><small>Funciona no telemóvel e no PC</small></div>
+                  <div class="upload-hint">JPG, PNG, WEBP — máximo 5MB</div>
+                </div>
+                <div id="uploadPreviewWrap" class="photo-preview-wrap" style="display:none">
+                  <img id="uploadPreview" class="photo-preview" alt="Preview">
+                  <button class="remove-photo" onclick="removePhoto(event)" type="button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+                  </button>
+                </div>
+              </div>
+              <div class="upload-progress" id="uploadProgress"><div class="upload-progress-bar" id="uploadBar"></div></div>
+            </div>
+            <div class="afg"><label>Nome do Produto *</label><input type="text" id="pName" placeholder="Ex: Smartphone Samsung A15"></div>
+            <div class="afg"><label>Descrição</label><textarea id="pDesc" placeholder="Descreva o produto em detalhe..."></textarea></div>
+            <div class="afr">
+              <div class="afg"><label>Preço (Kz) *</label><input type="number" id="pPrice" placeholder="65000" min="0"></div>
+              <div class="afg"><label>Stock *</label><input type="number" id="pStock" placeholder="10" value="10" min="0"></div>
+            </div>
+            <div class="afr">
+              <div class="afg">
+                <label>Categoria</label>
+                <select id="pCat">
+                  <option>Electrónica</option><option>Moda</option><option>Casa</option>
+                  <option>Alimentação</option><option>Beleza</option><option>Desporto</option><option>Outros</option>
+                </select>
+              </div>
+              <div class="afg">
+                <label>Etiqueta Promoção</label>
+                <select id="pPromo">
+                  <option value="">— Nenhuma —</option>
+                  <option value="NOVO">NOVO</option><option value="PROMO">PROMO</option>
+                  <option value="-20%">-20%</option><option value="-30%">-30%</option>
+                  <option value="-50%">-50%</option><option value="DESTAQUE">DESTAQUE</option>
+                </select>
+              </div>
+            </div>
+            <div style="display:flex;gap:10px;margin-top:8px;flex-wrap:wrap;">
+              <button class="btn-save" id="btnSave" onclick="saveProd()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+                Guardar Produto
+              </button>
+              <button class="btn-cancel-edit" id="btnCancel" style="display:none" onclick="cancelEdit()">Cancelar</button>
+            </div>
+          </div>
+        </div>
+        <div class="admin-sec" id="secOrders">
+          <div class="a-card">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg> Pedidos Recebidos</h3>
+            <div id="ordersList"></div>
+          </div>
+        </div>
+        <div class="admin-sec" id="secStore">
+          <div class="a-card">
+            <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M21 12h-1M4 12H3M12 21v-1M12 4V3"/></svg> Configurações da Loja</h3>
+            <div class="afg"><label>Nome da Loja</label><input type="text" id="sName" placeholder="Kakweia Comercial"></div>
+            <div class="afg"><label>WhatsApp</label><input type="tel" id="sWA" placeholder="Tel:"></div>
+            <div class="afg"><label>Cidade / Localização</label><input type="text" id="sCity" placeholder="Luanda, Angola"></div>
+            <div class="afg"><label>Nova Senha Admin</label><input type="password" id="sPass" placeholder="Deixar em branco para manter"></div>
+            <button class="btn-save" onclick="saveStore()">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 21H5a2 2 0 01-2-2V5a2 2 0 012-2h11l5 5v11a2 2 0 01-2 2z"/><polyline points="17,21 17,13 7,13 7,21"/><polyline points="7,3 7,8 15,8"/></svg>
+              Guardar Configurações
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ================================================
+     BOTÃO AJUDA + MODAL QUEM SOMOS
+================================================ -->
+<button class="help-btn" onclick="openHelp()" title="Ajuda & Informações">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17" stroke-width="3"/></svg>
+</button>
+
+<div class="help-modal-bg" id="helpModal" onclick="closeHelpOutside(event)">
+  <div class="help-modal" id="helpModalBox">
+    <div class="help-drag"></div>
+
+    <div class="help-head">
+      <div class="help-head-logo">
+        <svg viewBox="0 0 96 96" fill="none">
+          <rect width="96" height="96" rx="22" fill="#0055D4"/>
+          <rect x="22" y="20" width="9" height="56" rx="3" fill="white"/>
+          <path d="M31 48 L58 20 L70 20 L45 48 L70 76 L58 76 Z" fill="white"/>
+          <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
+        </svg>
+        <div>
+          <div class="help-head-title"><span class="kk">Kak</span>weia Comercial</div>
+          <div class="help-head-sub">Angola &nbsp;·&nbsp; Desde 2020</div>
+        </div>
+      </div>
+      <button class="btn-close" onclick="closeHelp()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+
+    <div class="help-body">
+
+      <!-- QUEM SOMOS -->
+      <div class="help-section">
+        <div class="help-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
+          Quem Somos
+        </div>
+        <p class="help-about-text">
+          A <strong>Kakweia Comercial</strong> é uma empresa angolana com presença em múltiplas províncias do país, dedicada a trazer produtos de qualidade ao alcance de todos os angolanos.<br><br>
+          Importamos directamente dos melhores mercados mundiais — <strong>Estados Unidos, Dubai, China e Europa</strong> — garantindo variedade, qualidade e preços acessíveis para todo o tipo de bolso. Trabalhamos com rigor para que cada encomenda chegue nas melhores condições, no menor tempo possível.
+        </p>
+        <div class="help-flags">
+          <div class="help-flag"><span>🇺🇸</span> América</div>
+          <div class="help-flag"><span>🇦🇪</span> Dubai</div>
+          <div class="help-flag"><span>🇨🇳</span> China</div>
+          <div class="help-flag"><span>🇪🇺</span> Europa</div>
+          <div class="help-flag"><span>🇦🇴</span> Angola</div>
+        </div>
+      </div>
+
+      <!-- MISSÃO -->
+      <div class="help-section">
+        <div class="help-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          Missão & Valores
+        </div>
+        <p class="help-about-text">
+          A nossa missão é <strong>democratizar o acesso a produtos de qualidade</strong> em Angola, eliminando intermediários desnecessários e tornando as importações acessíveis a todos. Acreditamos que cada angolano merece ter acesso ao melhor do mercado mundial, independentemente da sua localização ou poder de compra.
+        </p>
+      </div>
+
+      <!-- FUNCIONALIDADES -->
+      <div class="help-section">
+        <div class="help-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+          Como Funciona a Loja
+        </div>
+        <div class="help-features">
+          <div class="help-feature">
+            <div class="help-feature-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
+            </div>
+            <div class="help-feature-txt">
+              <h4>Pesquisa Fácil</h4>
+              <p>Pesquise qualquer produto pelo nome ou filtre por categoria.</p>
+            </div>
+          </div>
+          <div class="help-feature">
+            <div class="help-feature-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
+            </div>
+            <div class="help-feature-txt">
+              <h4>Carrinho de Compras</h4>
+              <p>Adicione vários produtos e finalize tudo numa só encomenda.</p>
+            </div>
+          </div>
+          <div class="help-feature">
+            <div class="help-feature-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div class="help-feature-txt">
+              <h4>Entrega em Casa</h4>
+              <p>Entregamos em todas as 18 províncias de Angola.</p>
+            </div>
+          </div>
+          <div class="help-feature">
+            <div class="help-feature-ico">
+              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            </div>
+            <div class="help-feature-txt">
+              <h4>Pedido via WhatsApp</h4>
+              <p>Confirme a encomenda directamente pelo WhatsApp de forma rápida.</p>
+            </div>
+          </div>
+          <div class="help-feature">
+            <div class="help-feature-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div class="help-feature-txt">
+              <h4>Compra Segura</h4>
+              <p>Pagamento na entrega — só paga quando receber o produto.</p>
+            </div>
+          </div>
+          <div class="help-feature">
+            <div class="help-feature-ico">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
+            </div>
+            <div class="help-feature-txt">
+              <h4>Produtos Originais</h4>
+              <p>Importados directamente da fonte, com garantia de autenticidade.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROVÍNCIAS -->
+      <div class="help-section">
+        <div class="help-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+          Áreas de Cobertura
+        </div>
+        <div class="help-provinces">
+          <span class="help-prov">Luanda</span><span class="help-prov">Benguela</span>
+          <span class="help-prov">Huambo</span><span class="help-prov">Huíla</span>
+          <span class="help-prov">Cabinda</span><span class="help-prov">Malanje</span>
+          <span class="help-prov">Kwanza Norte</span><span class="help-prov">Kwanza Sul</span>
+          <span class="help-prov">Lunda Norte</span><span class="help-prov">Lunda Sul</span>
+          <span class="help-prov">Bié</span><span class="help-prov">Moxico</span>
+          <span class="help-prov">Cuando Cubango</span><span class="help-prov">Cunene</span>
+          <span class="help-prov">Namibe</span><span class="help-prov">Uíge</span>
+          <span class="help-prov">Zaire</span><span class="help-prov">Cuando Cubango</span>
+        </div>
+      </div>
+
+      <!-- CONTACTO -->
+      <div class="help-section">
+        <div class="help-section-title">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3"/></svg>
+          Contactos
+        </div>
+        <div class="help-contacts">
+          <div class="help-contact-row">
+            <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+            <span><strong>WhatsApp:</strong> <a href="tel:+244974620666">+244974620666</a></span>
+          </div>
+          <div class="help-contact-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            <span><strong>Sede:</strong> Namibe, Angola</span>
+          </div>
+          <div class="help-contact-row">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/></svg>
+            <span><strong>Horário:</strong> Segunda a Sábado, 08h00 – 20h00</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- BANNER FINAL -->
+      <div class="help-banner">
+        <p>💛 <strong>Obrigado por escolher a Kakweia Comercial.</strong><br>
+        O nosso compromisso é trazer o mundo até si, <strong>a preços que cabem no seu bolso.</strong><br>
+        <em style="font-size:12px;color:var(--muted)">Feito com orgulho em Angola 🇦🇴</em></p>
+      </div>
+
+      <button class="help-close-btn" onclick="closeHelp()">Fechar</button>
+    </div>
+  </div>
+</div>
+
+<div class="theme-switcher" id="themeSwitcher">
+  <div class="theme-panel" id="themePanel">
+    <div class="theme-panel-title">Tema da Loja</div>
+    <button class="theme-opt active" id="tOptDefault" onclick="setTheme('default')"><span class="dot dot-default"></span> Padrão (Azul)</button>
+    <button class="theme-opt" id="tOptWhite" onclick="setTheme('white')"><span class="dot dot-white"></span> Claro / Branco</button>
+    <button class="theme-opt" id="tOptDark" onclick="setTheme('dark')"><span class="dot dot-dark"></span> Escuro / Preto</button>
+  </div>
+  <button class="theme-toggle-btn" onclick="toggleThemePanel()" title="Mudar tema">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
+  </button>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const SUPABASE_URL = 'https://eujgcabznycgdaisvtbz.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1amdjYWJ6bnljZ2RhaXN2dGJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMDQ2NTQsImV4cCI6MjA4ODU4MDY1NH0.epT0ktghstxfxWvykgXMHCd1BZruNt-5GWf88Dp9byQ';
+const sb = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+let products  = [];
+let cart      = JSON.parse(localStorage.getItem('kc_cart') || '[]');
+let curCat    = 'Todos';
+let adminPass = localStorage.getItem('kc_ap') || 'angola2025';
+let storeInfo = { name:'Kakweia Comercial', wa:'+244974620666', city:'Luanda, Angola' };
+let photoFile = null;
+
+const fmt = n => Number(n).toLocaleString('pt-PT');
+const $   = id => document.getElementById(id);
+
+const ICO = {
+  pkg:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" style="width:100%;height:100%;opacity:.35"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>`,
+  trash:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4h6v2"/></svg>`,
+  pin:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>`,
+  phone:  `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3"/></svg>`,
+  cal:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>`,
+  box:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 00-1-1.73l-7-4a2 2 0 00-2 0l-7 4A2 2 0 003 8v8a2 2 0 001 1.73l7 4a2 2 0 002 0l7-4A2 2 0 0021 16z"/></svg>`,
+  person: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M12 14c-6 0-8 2-8 4v1h16v-1c0-2-2-4-8-4z"/></svg>`,
+  img:    `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21,15 16,10 5,21"/></svg>`,
+  plus:   `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>`,
+};
+
+window.addEventListener('DOMContentLoaded', () => {
+  setTimeout(() => { $('splash').classList.add('hide'); setTimeout(() => { $('splash').style.display='none'; }, 900); }, 3200);
+  boot();
+});
+
+async function boot() {
+  await Promise.all([loadProducts(), loadSettings()]);
+  renderCart(); updateBadge(); loadOrderCount();
+}
+
+async function loadProducts() {
+  const { data, error } = await sb.from('products').select('*').eq('active', true).order('id', { ascending:false });
+  if (error) {
+    const msg = error?.message || JSON.stringify(error);
+    $('productGrid').innerHTML = `<div class="empty-state" style="grid-column:1/-1"><h3 style="color:#E05555">Erro de ligação</h3><p style="max-width:360px;margin:8px auto 16px">${msg}</p><button onclick="loadProducts()" style="background:var(--brand);color:white;border:none;padding:10px 24px;border-radius:8px;cursor:pointer;font-family:Outfit,sans-serif;font-weight:700">Tentar novamente</button></div>`;
+    showToast('Erro: ' + msg.substring(0,50), 'error');
+    return;
+  }
+  products = data || [];
+  $('heroProds').textContent = products.length;
+  renderProducts(); renderCats(); updateBadge();
+}
+
+async function loadSettings() {
+  const { data } = await sb.from('store_settings').select('*');
+  if (!data) return;
+  data.forEach(r => {
+    if (r.key==='store_name')     storeInfo.name = r.value;
+    if (r.key==='store_whatsapp') storeInfo.wa   = r.value;
+    if (r.key==='store_city')     storeInfo.city = r.value;
+  });
+}
+
+async function loadOrderCount() {
+  const { count } = await sb.from('orders').select('*', { count:'exact', head:true });
+  $('heroOrds').textContent = count ?? '0';
+}
+
+function getFiltered() {
+  const q = $('searchInput').value.toLowerCase().trim();
+  return products.filter(p => {
+    const catOk = curCat==='Todos' || p.category===curCat;
+    const qOk   = !q || p.name.toLowerCase().includes(q) || (p.description||'').toLowerCase().includes(q);
+    return catOk && qOk;
+  });
+}
+
+function renderProducts() {
+  const list = getFiltered();
+  $('prodCount').textContent = list.length + ' produto' + (list.length!==1?'s':'');
+  if (!list.length) { $('productGrid').innerHTML=`<div class="empty-state">${ICO.pkg}<h3>Sem resultados</h3><p>Tenta outra pesquisa ou categoria</p></div>`; return; }
+  $('productGrid').innerHTML = list.map(p => {
+    const sc = p.stock<=0?'no-stock':p.stock<=5?'low-stock':'in-stock';
+    const st = p.stock<=0?'Esgotado':p.stock<=5?'Pouco stock':'Em stock';
+    const dot= p.stock<=0?'#E05555':p.stock<=5?'var(--gold)':'var(--green)';
+    return `
+      <article class="pcard">
+        ${p.promo?`<div class="promo-badge">${p.promo}</div>`:''}
+        <div class="pcard-img">
+          ${p.image_url?`<img data-src="${p.image_url}" alt="${p.name}" class="lazy-img" onerror="this.style.display='none';this.parentElement.querySelector('.pcard-no-img').style.display='flex'">` : ''}
+          <div class="pcard-no-img" style="display:${p.image_url?'none':'flex'}">${ICO.img}<span>Sem imagem</span></div>
+        </div>
+        <div class="pcard-body">
+          <div class="pcard-name">${p.name}</div>
+          <div class="pcard-desc">${p.description||''}</div>
+          <div class="pcard-price">${fmt(p.price)}<span class="cur">Kz</span></div>
+          <div class="pcard-footer">
+            <span class="stock-tag ${sc}"><svg viewBox="0 0 8 8" fill="${dot}"><circle cx="4" cy="4" r="4"/></svg>${st}</span>
+            ${p.stock>0?`<button class="btn-add" onclick="addToCart(${p.id})">${ICO.plus} Adicionar</button>`:''}
+          </div>
+        </div>
+      </article>`;
+  }).join('');
+  lazyLoadImages();
+}
+
+function renderCats() {
+  const cats = ['Todos', ...new Set(products.map(p => p.category))];
+  $('catScroll').innerHTML = cats.map(c => `<button class="cat-pill ${c===curCat?'active':''}" onclick="setCat('${c}',this)">${c}</button>`).join('');
+}
+
+function setCat(cat, el) {
+  curCat = cat;
+  document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderProducts();
+}
+function filterProducts() { renderProducts(); }
+
+// ── LAZY LOAD — estilo Facebook ───────────────────
+// Só carrega a foto quando o card entra no ecrã.
+// Enquanto não carrega: fundo skeleton. Quando carrega: blur dissolve.
+let lazyObserver = null;
+
+function lazyLoadImages() {
+  // Reutiliza o mesmo observer se já existir
+  if (!lazyObserver) {
+    lazyObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const img = entry.target;
+        const src = img.getAttribute('data-src');
+        if (!src) return;
+        img.src = src;
+        img.removeAttribute('data-src');
+        img.onload  = () => img.classList.add('loaded');
+        img.onerror = () => { img.style.display='none'; const ni=img.parentElement?.querySelector('.pcard-no-img'); if(ni) ni.style.display='flex'; };
+        lazyObserver.unobserve(img);
+      });
+    }, {
+      rootMargin: '200px 0px', // começa a carregar 200px antes de entrar no ecrã
+      threshold: 0
+    });
+  }
+  // Observa todos os imgs com data-src ainda não carregados
+  document.querySelectorAll('img.lazy-img[data-src]').forEach(img => lazyObserver.observe(img));
+}
+
+function addToCart(id) {
+  const p = products.find(x => x.id===id);
+  if (!p || p.stock<=0) return;
+  const ex = cart.find(c => c.id===id);
+  if (ex) { if (ex.qty<p.stock) ex.qty++; } else cart.push({id, qty:1});
+  saveCart(); renderCart(); updateBadge();
+  showToast(p.name.substring(0,24)+' adicionado ao carrinho', 'success');
+}
+
+function changeQty(id, d) {
+  const item=cart.find(c=>c.id===id), p=products.find(x=>x.id===id);
+  if (!item) return;
+  item.qty = Math.max(1, Math.min(item.qty+d, p?p.stock:99));
+  saveCart(); renderCart();
+}
+
+function removeFromCart(id) { cart=cart.filter(c=>c.id!==id); saveCart(); renderCart(); updateBadge(); }
+function saveCart()  { localStorage.setItem('kc_cart', JSON.stringify(cart)); }
+function calcTotal() { return cart.reduce((s,i)=>{const p=products.find(x=>x.id===i.id);return s+(p?p.price*i.qty:0);},0); }
+
+function renderCart() {
+  const body=$('cartBody'), foot=$('cartFoot');
+  if (!cart.length) {
+    body.innerHTML=`<div class="cart-empty-state">${ICO.pkg}<p>O carrinho está vazio</p><small>Adicione produtos para começar</small></div>`;
+    foot.style.display='none'; return;
+  }
+  foot.style.display='block';
+  let total=0;
+  body.innerHTML = cart.map(item => {
+    const p=products.find(x=>x.id===item.id); if(!p) return '';
+    const sub=p.price*item.qty; total+=sub;
+    return `
+      <div class="cart-item-card">
+        ${p.image_url?`<div class="ci-thumb"><img src="${p.image_url}" alt="${p.name}"></div>`:`<div class="ci-thumb">${ICO.pkg}</div>`}
+        <div class="ci-info">
+          <div class="ci-name">${p.name}</div>
+          <div class="ci-unit">${fmt(p.price)} Kz / unidade</div>
+          <div class="qty-row">
+            <button class="qty-btn" onclick="changeQty(${item.id},-1)">−</button>
+            <span class="qty-val">${item.qty}</span>
+            <button class="qty-btn" onclick="changeQty(${item.id},1)">+</button>
+          </div>
+          <div class="ci-price">${fmt(sub)} Kz</div>
+        </div>
+        <button class="ci-del" onclick="removeFromCart(${item.id})">${ICO.trash}</button>
+      </div>`;
+  }).join('');
+  $('cartSub').textContent=$('cartGrand').textContent=fmt(total)+' Kz';
+}
+
+function updateBadge() { $('cartBadge').textContent=cart.reduce((s,c)=>s+c.qty,0); }
+function toggleCart()  { $('cartDrawer').classList.toggle('show'); $('overlay').classList.toggle('show'); }
+
+function openCheckout() {
+  toggleCart();
+  let html='', total=0;
+  cart.forEach(item => {
+    const p=products.find(x=>x.id===item.id); if(!p) return;
+    const sub=p.price*item.qty; total+=sub;
+    html+=`<div class="recap-line">${p.image_url?`<div class="recap-thumb"><img src="${p.image_url}" alt=""></div>`:`<div class="recap-thumb">${ICO.pkg}</div>`}<span style="flex:1">${p.name} × ${item.qty}</span><span>${fmt(sub)} Kz</span></div>`;
+  });
+  html+=`<div class="recap-total"><span>Total</span><span>${fmt(total)} Kz</span></div>`;
+  $('orderRecap').innerHTML='<h4>Resumo do Pedido</h4>'+html;
+  $('modalCheckout').classList.add('show');
+}
+
+function closeModal(id) { $(id).classList.remove('show'); }
+
+async function submitOrder() {
+  const name=$('cName').value.trim(), prov=$('cProv').value, mun=$('cMun').value.trim(), wa=$('cWA').value.trim();
+  if (!name||!prov||!mun||!wa) { showToast('Preencha todos os campos obrigatórios','error'); return; }
+  const btn=$('btnConfirm');
+  btn.disabled=true; btn.innerHTML='<div class="spinner"></div> A processar...';
+  const total=calcTotal();
+  const items=cart.map(i=>{const p=products.find(x=>x.id===i.id);return{id:i.id,name:p?.name,image:p?.image_url,qty:i.qty,price:p?.price};});
+  const {error}=await sb.from('orders').insert([{client_name:name,province:prov,municipality:mun,whatsapp:wa,address:$('cAddr').value,items,total,status:'Novo'}]);
+  if (error) { showToast('Erro ao guardar pedido: '+(error.message||JSON.stringify(error)),'error'); btn.disabled=false; btn.innerHTML='Confirmar Pedido'; return; }
+  for (const item of cart) { const p=products.find(x=>x.id===item.id); if(p) await sb.from('products').update({stock:Math.max(0,p.stock-item.qty)}).eq('id',p.id); }
+  cart=[]; saveCart(); updateBadge(); renderCart();
+  closeModal('modalCheckout'); $('modalSuccess').classList.add('show');
+  btn.disabled=false; btn.innerHTML='Confirmar Pedido';
+  await loadProducts(); loadOrderCount();
+}
+
+function sendWhatsApp() {
+  const name=$('cName').value.trim()||'—', prov=$('cProv').value||'—', mun=$('cMun').value.trim()||'—', wa=$('cWA').value.trim()||'—';
+  let msg=`*Novo Pedido — Kakweia Comercial*\n\n*Cliente:* ${name}\n*Localização:* ${prov}, ${mun}\n*WhatsApp:* ${wa}\n\n*Produtos:*\n`;
+  let total=0;
+  cart.forEach(i=>{const p=products.find(x=>x.id===i.id);if(p){msg+=`• ${p.name} × ${i.qty} = ${fmt(p.price*i.qty)} Kz\n`;total+=p.price*i.qty;}});
+  msg+=`\n*Total: ${fmt(total)} Kz*\n_Kakweia Comercial — Angola_`;
+  window.open(`https://wa.me/${storeInfo.wa.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+function previewPhoto(e) {
+  const file=e.target.files[0]; if(!file) return;
+  if (file.size>5*1024*1024) { showToast('Fotografia demasiado grande. Máx. 5MB','error'); return; }
+  photoFile=file;
+  const reader=new FileReader();
+  reader.onload=ev=>{ $('uploadPreview').src=ev.target.result; $('uploadPlaceholder').style.display='none'; $('uploadPreviewWrap').style.display='block'; $('uploadArea').classList.add('has-photo'); };
+  reader.readAsDataURL(file);
+}
+
+function removePhoto(e) {
+  if (e&&e.stopPropagation) e.stopPropagation();
+  photoFile=null; $('photoFile').value=''; $('existingImg').value='';
+  $('uploadPreview').src=''; $('uploadPlaceholder').style.display='block';
+  $('uploadPreviewWrap').style.display='none'; $('uploadArea').classList.remove('has-photo');
+}
+
+async function uploadPhoto(name) {
+  if (!photoFile) return $('existingImg').value||null;
+  const ext=photoFile.name.split('.').pop().toLowerCase();
+  const slug=name.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+  const path=`${slug}-${Date.now()}.${ext}`;
+  $('uploadProgress').style.display='block'; $('uploadBar').style.width='30%';
+  const {data,error}=await sb.storage.from('products').upload(path,photoFile,{cacheControl:'3600',upsert:false,contentType:photoFile.type});
+  $('uploadBar').style.width='85%';
+  if (error) { $('uploadProgress').style.display='none'; showToast('Erro no upload: '+error.message,'error'); return null; }
+  const {data:urlData}=sb.storage.from('products').getPublicUrl(path);
+  setTimeout(()=>{ $('uploadProgress').style.display='none'; $('uploadBar').style.width='0%'; },700);
+  return urlData.publicUrl;
+}
+
+function openAdmin()  { $('adminPanel').classList.add('show'); }
+function closeAdmin() { $('adminPanel').classList.remove('show'); logoClicks = 0; }
+
+// ── MODAL AJUDA ───────────────────────────────────
+function openHelp()  { $('helpModal').classList.add('show'); document.body.style.overflow='hidden'; }
+function closeHelp() { $('helpModal').classList.remove('show'); document.body.style.overflow=''; }
+function closeHelpOutside(e) { if (e.target === $('helpModal')) closeHelp(); }
+
+// ── 5 CLIQUES NO LOGO ────────────────────────────
+let logoClicks = 0;
+let logoTimer  = null;
+function logoClick() {
+  logoClicks++;
+  clearTimeout(logoTimer);
+  if (logoClicks >= 10) {
+    logoClicks = 0;
+    const logo = $('navLogo');
+    logo.style.transition = 'opacity .08s';
+    logo.style.opacity = '.2';
+    setTimeout(() => { logo.style.opacity = '1'; }, 130);
+    setTimeout(() => openAdmin(), 160);
+    return;
+  }
+  logoTimer = setTimeout(() => { logoClicks = 0; }, 2000);
+}
+
+function doLogin() {
+  if ($('aUser').value==='admin' && $('aPass').value===adminPass) {
+    $('adminLoginWrap').style.display='none'; $('adminDash').style.display='flex';
+    loadAdminAll();
+    $('sName').value=storeInfo.name; $('sWA').value=storeInfo.wa; $('sCity').value=storeInfo.city;
+  } else { $('loginErr').style.display='block'; }
+}
+
+function logoutAdmin() {
+  $('adminDash').style.display='none'; $('adminLoginWrap').style.display='flex';
+  $('aUser').value=''; $('aPass').value=''; $('loginErr').style.display='none'; closeAdmin();
+}
+
+async function loadAdminAll() { await loadProducts(); renderAdminStats(); renderAdminProds(); }
+
+function renderAdminStats() {
+  const ts=products.reduce((s,p)=>s+p.stock,0);
+  $('statsRow').innerHTML=`
+    <div class="stat-tile"><div class="n">${products.length}</div><div class="l">Produtos</div></div>
+    <div class="stat-tile"><div class="n">${ts}</div><div class="l">Em Stock</div></div>
+    <div class="stat-tile"><div class="n" id="stOrds">...</div><div class="l">Pedidos</div></div>
+    <div class="stat-tile"><div class="n" id="stRev">...</div><div class="l">Receita Kz</div></div>`;
+  sb.from('orders').select('id,total').then(({data})=>{
+    if (data) { $('stOrds').textContent=data.length; $('stRev').textContent=fmt(data.reduce((s,o)=>s+Number(o.total),0)); }
+  });
+  $('statsProds').innerHTML=products.map(p=>`
+    <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;">
+      <div style="width:32px;height:32px;border-radius:7px;background:var(--soft);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;">
+        ${p.image_url?`<img src="${p.image_url}" style="width:100%;height:100%;object-fit:cover">`:ICO.pkg}
+      </div>
+      <span style="flex:1">${p.name}</span>
+      <span style="color:${p.stock<=0?'#E05555':p.stock<=5?'var(--gold)':'var(--green)'}">Stock: ${p.stock}</span>
+    </div>`).join('');
+}
+
+function renderAdminProds() {
+  $('adminProdList').innerHTML=products.map(p=>`
+    <div class="prod-admin-row">
+      <div class="par-thumb">${p.image_url?`<img src="${p.image_url}" alt="">`:ICO.pkg}</div>
+      <div class="par-info">
+        <h4>${p.name}</h4>
+        <div class="meta">${p.category} · Stock: ${p.stock}${p.promo?` · <b>${p.promo}</b>`:''}</div>
+        <div class="plbl">${fmt(p.price)} Kz</div>
+      </div>
+      <div class="par-actions">
+        <button class="btn-edit" onclick="editProd(${p.id})">${ICO.plus} Editar</button>
+        <button class="btn-del"  onclick="deleteProd(${p.id})">${ICO.trash}</button>
+      </div>
+    </div>`).join('')||'<p style="color:var(--muted);text-align:center;padding:24px">Nenhum produto ainda.</p>';
+}
+
+async function renderAdminOrders() {
+  const {data,error}=await sb.from('orders').select('*').order('created_at',{ascending:false});
+  if (error||!data?.length) { $('ordersList').innerHTML='<p style="color:var(--muted);text-align:center;padding:24px">Nenhum pedido ainda.</p>'; return; }
+  const sc={'Novo':'s-new','Em preparação':'s-prep','Enviado':'s-sent','Entregue':'s-done','Cancelado':'s-cancel'};
+  $('ordersList').innerHTML=data.map(o=>`
+    <div class="order-row">
+      <div class="order-row-head">
+        <strong>${ICO.person} ${o.client_name}</strong>
+        <span class="status-pill ${sc[o.status]||'s-new'}">${o.status}</span>
+      </div>
+      <div class="order-detail">${ICO.pin} ${o.province}, ${o.municipality}</div>
+      <div class="order-detail">${ICO.phone} ${o.whatsapp}</div>
+      ${o.address?`<div class="order-detail">${ICO.pin} ${o.address}</div>`:''}
+      <div class="order-detail">${ICO.cal} ${new Date(o.created_at).toLocaleString('pt-PT')}</div>
+      <div class="order-detail">${ICO.box} ${(o.items||[]).map(i=>`${i.name} ×${i.qty}`).join(', ')}</div>
+      <div class="order-total-row">${fmt(o.total)} Kz</div>
+      <select class="status-sel" onchange="updateStatus(${o.id},this.value)">
+        ${['Novo','Em preparação','Enviado','Entregue','Cancelado'].map(s=>`<option ${o.status===s?'selected':''}>${s}</option>`).join('')}
+      </select>
+    </div>`).join('');
+}
+
+async function updateStatus(id,status) { await sb.from('orders').update({status}).eq('id',id); showToast('Estado actualizado: '+status,'success'); }
+
+function editProd(id) {
+  const p=products.find(x=>x.id===id); if(!p) return;
+  $('editId').value=id; $('pName').value=p.name; $('pDesc').value=p.description||'';
+  $('pPrice').value=p.price; $('pStock').value=p.stock; $('pCat').value=p.category; $('pPromo').value=p.promo||'';
+  $('existingImg').value=p.image_url||'';
+  if (p.image_url) { $('uploadPreview').src=p.image_url; $('uploadPlaceholder').style.display='none'; $('uploadPreviewWrap').style.display='block'; $('uploadArea').classList.add('has-photo'); }
+  else { removePhoto({}); }
+  $('addTitle').innerHTML=`${ICO.plus} Editar Produto`;
+  $('btnCancel').style.display='inline-block';
+  switchSec('secAdd',document.querySelectorAll('.side-btn')[2]);
+}
+
+function cancelEdit() {
+  $('editId').value=''; photoFile=null;
+  ['pName','pDesc','pPrice'].forEach(id=>$(id).value='');
+  $('pStock').value='10'; $('pPromo').value='';
+  removePhoto({});
+  $('addTitle').innerHTML=`${ICO.plus} Adicionar Novo Produto`;
+  $('btnCancel').style.display='none';
+}
+
+async function saveProd() {
+  const name=($('pName').value||'').trim(), price=parseFloat($('pPrice').value);
+  if (!name||isNaN(price)||price<=0) { showToast('Nome e preço são obrigatórios','error'); return; }
+  const btn=$('btnSave'); btn.disabled=true; btn.innerHTML='<div class="spinner"></div> A guardar...';
+  const imageUrl=await uploadPhoto(name);
+  const row={name,price,description:($('pDesc').value||'').trim(),stock:parseInt($('pStock').value)||0,category:$('pCat').value,promo:$('pPromo').value,image_url:imageUrl||'',active:true};
+  const editId=parseInt($('editId').value||'0');
+  let err;
+  if (editId) { ({error:err}=await sb.from('products').update(row).eq('id',editId)); }
+  else        { ({error:err}=await sb.from('products').insert([row])); }
+  btn.disabled=false; btn.innerHTML='Guardar Produto';
+  if (err) { showToast('Erro: '+err.message,'error'); return; }
+  showToast(editId?'Produto actualizado com sucesso':'Produto adicionado com sucesso','success');
+  cancelEdit(); await loadProducts(); renderAdminProds(); renderAdminStats();
+}
+
+async function deleteProd(id) {
+  if (!confirm('Apagar este produto?')) return;
+  await sb.from('products').update({active:false}).eq('id',id);
+  cart=cart.filter(c=>c.id!==id); saveCart(); updateBadge();
+  showToast('Produto eliminado','success');
+  await loadProducts(); renderAdminProds(); renderAdminStats();
+}
+
+async function saveStore() {
+  const upd=[{key:'store_name',value:$('sName').value||'Kakweia Comercial'},{key:'store_whatsapp',value:$('sWA').value},{key:'store_city',value:$('sCity').value}];
+  for (const u of upd) await sb.from('store_settings').upsert(u,{onConflict:'key'});
+  const np=$('sPass').value; if(np){adminPass=np;localStorage.setItem('kc_ap',np);$('sPass').value='';}
+  showToast('Configurações guardadas com sucesso','success'); await loadSettings();
+}
+
+function switchSec(id,btn) {
+  document.querySelectorAll('.admin-sec').forEach(s=>s.classList.remove('show'));
+  document.querySelectorAll('.side-btn').forEach(b=>b.classList.remove('active'));
+  $(id).classList.add('show'); btn.classList.add('active');
+  if (id==='secOrders') renderAdminOrders();
+  if (id==='secStats')  renderAdminStats();
+  if (id==='secProds')  renderAdminProds();
+}
+
+function setTheme(theme) {
+  document.body.classList.remove('theme-white','theme-dark');
+  if (theme==='white') document.body.classList.add('theme-white');
+  if (theme==='dark')  document.body.classList.add('theme-dark');
+  ['default','white','dark'].forEach(t => {
+    const b=$('tOpt'+t.charAt(0).toUpperCase()+t.slice(1));
+    if (b) b.classList.toggle('active', t===theme);
+  });
+  localStorage.setItem('kc_theme', theme);
+  $('themePanel').classList.remove('open');
+  showToast('Tema '+(theme==='default'?'Padrão':theme==='white'?'Claro':'Escuro')+' activado','success');
+}
+
+function toggleThemePanel() { $('themePanel').classList.toggle('open'); }
+
+document.addEventListener('click', e => {
+  const sw=$('themeSwitcher');
+  if (sw && !sw.contains(e.target)) $('themePanel').classList.remove('open');
+});
+
+(function() {
+  const saved=localStorage.getItem('kc_theme')||'default';
+  if (saved!=='default') setTheme(saved);
+  else $('tOptDefault')?.classList.add('active');
+})();
+
+function showToast(msg, type='success') {
+  const t=$('toast');
+  t.className='toast '+type;
+  const icon=type==='success'
+    ?`<svg viewBox="0 0 24 24" fill="none" stroke="var(--green)" stroke-width="2.5" style="width:16px;height:16px;flex-shrink:0"><path d="M20 6L9 17l-5-5"/></svg>`
+    :`<svg viewBox="0 0 24 24" fill="none" stroke="#E05555" stroke-width="2.5" style="width:16px;height:16px;flex-shrink:0"><path d="M18 6L6 18M6 6l12 12"/></svg>`;
+  t.innerHTML=icon+msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2800);
+}
+</script>
+</body>
+</html>
