@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kakweia Comercial — Loja Online</title>
+<title>Kakweiya Comercial — Loja Online</title>
 <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@700;800;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
@@ -101,41 +101,97 @@ nav{position:sticky;top:0;z-index:100;background:rgba(6,8,10,.97);backdrop-filte
 .hero-stat .num{font-size:26px;font-weight:800;color:var(--white);}
 .hero-stat .lbl{font-size:11px;color:var(--muted);margin-top:2px;text-transform:uppercase;letter-spacing:.6px;}
 
-.feed{max-width:1300px;margin:0 auto;padding:28px 20px;}
-.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;}
-.section-title{font-size:20px;font-weight:800;letter-spacing:-.4px;}
+.feed{max-width:1300px;margin:0 auto;padding:0 0 28px;}
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;padding:0 12px;}
+.section-title{font-size:18px;font-weight:800;letter-spacing:-.4px;}
 .section-title span{color:var(--brand);}
 .section-count{font-size:12px;color:var(--muted);background:var(--mid);border:1px solid var(--border2);padding:4px 13px;border-radius:20px;}
-.product-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:14px;}
-@media(min-width:640px){.product-grid{grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:18px;}}
-@media(min-width:1024px){.product-grid{grid-template-columns:repeat(auto-fill,minmax(235px,1fr));}}
-.skel{background:linear-gradient(90deg,var(--mid) 25%,var(--soft) 50%,var(--mid) 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;border-radius:var(--radius);height:320px;}
+
+.cat-icons-wrap{background:var(--charcoal);border-bottom:1px solid var(--border);padding:12px 0 8px;}
+.cat-icons-scroll{display:grid;grid-template-rows:repeat(2,auto);grid-auto-flow:column;grid-auto-columns:max-content;gap:6px 4px;overflow-x:auto;scrollbar-width:none;padding:0 10px;}
+.cat-icons-scroll::-webkit-scrollbar{display:none;}
+.cat-icon-item{display:flex;flex-direction:column;align-items:center;gap:5px;flex-shrink:0;width:72px;cursor:pointer;padding:3px 0;transition:transform .18s;}
+.cat-icon-item:hover{transform:translateY(-2px);}
+.cat-icon-circle{width:56px;height:56px;border-radius:50%;background:var(--mid);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:22px;overflow:hidden;transition:border-color .2s,box-shadow .2s;flex-shrink:0;}
+.cat-icon-circle img{width:100%;height:100%;object-fit:cover;display:block;}
+.cat-icon-item.active .cat-icon-circle{border-color:var(--brand);box-shadow:0 0 0 3px rgba(0,85,212,.18);}
+.cat-icon-item.active .cat-icon-label{color:var(--brand);font-weight:800;}
+.cat-icon-label{font-size:10.5px;font-weight:600;color:var(--muted);text-align:center;line-height:1.2;max-width:72px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+
+.promo-tabs{display:flex;gap:0;padding:10px 12px 14px;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--border);}
+.promo-tabs::-webkit-scrollbar{display:none;}
+.promo-tab{flex-shrink:0;background:transparent;border:none;color:var(--muted);font-family:'Outfit',sans-serif;font-size:13px;font-weight:600;padding:6px 14px;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;white-space:nowrap;}
+.promo-tab.active{color:var(--text);border-bottom-color:var(--brand);}
+.promo-tab svg{width:13px;height:13px;vertical-align:middle;margin-right:4px;}
+
+.product-grid{display:grid;grid-template-columns:1fr 1fr;gap:2px;padding:0;}
+@media(min-width:640px){.product-grid{grid-template-columns:repeat(3,1fr);}}
+@media(min-width:900px){.product-grid{grid-template-columns:repeat(4,1fr);}}
+@media(min-width:1200px){.product-grid{grid-template-columns:repeat(5,1fr);}}
+
+.skel{background:linear-gradient(90deg,var(--mid) 25%,var(--soft) 50%,var(--mid) 75%);background-size:200% 100%;animation:shimmer 1.4s ease infinite;height:280px;}
 @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
-.pcard{background:var(--charcoal);border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;transition:transform .22s cubic-bezier(.23,1,.32,1),border-color .2s,box-shadow .2s;display:flex;flex-direction:column;position:relative;}
-.pcard:hover{transform:translateY(-4px);border-color:var(--border2);box-shadow:0 16px 44px rgba(0,0,0,.6);}
-.pcard-img{width:100%;aspect-ratio:1/1;background:var(--mid);display:flex;align-items:center;justify-content:center;overflow:hidden;position:relative;transition:transform .3s;}
-.pcard:hover .pcard-img{transform:scale(1.04);}
-.pcard-img img{width:100%;height:100%;object-fit:cover;position:absolute;inset:0;transition:transform .3s, filter .4s, opacity .4s;filter:blur(8px);opacity:0;}
-.pcard-img img.loaded{filter:blur(0);opacity:1;}
-.pcard:hover .pcard-img img{transform:scale(1.07);}
-.pcard-no-img{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;color:var(--muted2);}
+
+/* ── CARD ── */
+.pcard{background:var(--charcoal);border:none;border-radius:0;overflow:hidden;transition:opacity .2s;display:flex;flex-direction:column;position:relative;}
+.pcard:hover{opacity:.92;}
+
+/* ── IMAGEM COM LAZY LOAD ESTILO FACEBOOK ── */
+.pcard-img{
+  width:100%;aspect-ratio:3/4;
+  background:var(--mid);
+  display:flex;align-items:center;justify-content:center;
+  overflow:hidden;position:relative;
+}
+/* Skeleton animado que aparece enquanto a imagem carrega */
+.pcard-img .img-skel{
+  position:absolute;inset:0;z-index:1;
+  background:linear-gradient(90deg,var(--mid) 25%,var(--soft) 50%,var(--mid) 75%);
+  background-size:200% 100%;
+  animation:shimmer 1.4s ease infinite;
+  transition:opacity .4s ease;
+}
+.pcard-img .img-skel.done{opacity:0;pointer-events:none;}
+/* Imagem carrega com blur e dissolve — igual ao Facebook */
+.pcard-img img.lazy-img{
+  position:absolute;inset:0;z-index:2;
+  width:100%;height:100%;object-fit:cover;
+  opacity:0;
+  filter:blur(14px);
+  transform:scale(1.06);
+  transition:opacity .5s ease, filter .5s ease, transform .5s ease;
+  will-change:opacity,filter,transform;
+}
+.pcard-img img.lazy-img.loaded{
+  opacity:1;
+  filter:blur(0);
+  transform:scale(1);
+}
+.pcard:hover .pcard-img img.lazy-img.loaded{transform:scale(1.04);}
+/* Placeholder sem imagem */
+.pcard-no-img{
+  position:absolute;inset:0;z-index:2;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:8px;color:var(--muted2);
+}
 .pcard-no-img svg{width:40px;height:40px;opacity:.4;}
 .pcard-no-img span{font-size:11px;opacity:.5;}
-.promo-badge{position:absolute;top:10px;left:10px;background:var(--brand);color:white;font-size:10px;font-weight:800;padding:3px 10px;border-radius:5px;letter-spacing:.3px;z-index:2;}
-.pcard-body{padding:14px;flex:1;display:flex;flex-direction:column;}
-.pcard-name{font-size:13.5px;font-weight:700;line-height:1.3;margin-bottom:5px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;}
-.pcard-desc{font-size:11.5px;color:var(--muted);line-height:1.45;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-bottom:10px;flex:1;}
-.pcard-price{font-size:18px;font-weight:800;color:var(--brand);margin-bottom:10px;}
-.pcard-price .cur{font-size:11px;color:var(--muted);font-weight:500;margin-left:3px;}
-.pcard-footer{display:flex;align-items:center;justify-content:space-between;gap:8px;}
-.stock-tag{font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px;display:flex;align-items:center;gap:5px;}
-.stock-tag svg{width:8px;height:8px;flex-shrink:0;}
+
+.promo-badge{position:absolute;top:8px;left:0;background:var(--brand);color:white;font-size:10px;font-weight:800;padding:3px 9px 3px 8px;border-radius:0 4px 4px 0;letter-spacing:.3px;z-index:3;}
+.pcard-body{padding:7px 8px 10px;flex:1;display:flex;flex-direction:column;}
+.pcard-name{font-size:12.5px;font-weight:600;line-height:1.35;margin-bottom:4px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:var(--text);}
+.pcard-desc{display:none;}
+.pcard-price{font-size:15px;font-weight:800;color:var(--brand);margin-bottom:6px;}
+.pcard-price .cur{font-size:10px;color:var(--muted);font-weight:500;margin-left:2px;}
+.pcard-footer{display:flex;align-items:center;justify-content:space-between;gap:4px;}
+.stock-tag{font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;text-transform:uppercase;letter-spacing:.3px;display:flex;align-items:center;gap:4px;}
+.stock-tag svg{width:7px;height:7px;flex-shrink:0;}
 .in-stock{color:var(--green);background:rgba(26,158,92,.1);border:1px solid rgba(26,158,92,.25);}
 .low-stock{color:var(--gold);background:rgba(212,160,23,.1);border:1px solid rgba(212,160,23,.25);}
 .no-stock{color:#E05555;background:rgba(224,85,85,.1);border:1px solid rgba(224,85,85,.25);}
-.btn-add{background:var(--brand);color:white;border:none;padding:8px 15px;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .18s;display:flex;align-items:center;gap:6px;white-space:nowrap;}
-.btn-add svg{width:13px;height:13px;}
-.btn-add:hover{background:var(--brand2);transform:scale(1.05);}
+.btn-add{background:var(--brand);color:white;border:none;padding:6px 11px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .18s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.btn-add svg{width:12px;height:12px;}
+.btn-add:hover{background:var(--brand2);}
 .empty-state{grid-column:1/-1;text-align:center;padding:60px 20px;color:var(--muted);}
 .empty-state svg{width:56px;height:56px;margin:0 auto 16px;opacity:.3;}
 .empty-state h3{font-size:18px;font-weight:700;margin-bottom:6px;color:var(--text);}
@@ -343,22 +399,11 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
 .footer-logo-text .sub{font-size:9px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;}
 .footer-info{font-size:12px;color:var(--muted);text-align:right;line-height:1.7;}
 
-/* ── BOTÃO AJUDA ── */
-.help-btn {
-  position:fixed;bottom:84px;left:24px;z-index:150;
-  width:48px;height:48px;border-radius:50%;
-  background:linear-gradient(135deg,var(--gold),var(--gold2));
-  border:none;cursor:pointer;
-  display:flex;align-items:center;justify-content:center;
-  box-shadow:0 4px 20px rgba(212,160,23,.45);
-  transition:all .25s;
-  animation:helpPulse 3s ease infinite;
-}
+.help-btn{position:fixed;bottom:24px;left:24px;z-index:150;width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold2));border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(212,160,23,.45);transition:all .25s;animation:helpPulse 3s ease infinite;}
 .help-btn:hover{transform:scale(1.12);box-shadow:0 6px 28px rgba(212,160,23,.6);}
 .help-btn svg{width:22px;height:22px;color:#000;flex-shrink:0;}
 @keyframes helpPulse{0%,100%{box-shadow:0 4px 20px rgba(212,160,23,.45)}50%{box-shadow:0 4px 32px rgba(212,160,23,.75)}}
 
-/* ── MODAL AJUDA ── */
 .help-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:500;display:flex;align-items:flex-end;justify-content:center;padding:0;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(10px);}
 .help-modal-bg.show{opacity:1;pointer-events:all;}
 @media(min-width:600px){.help-modal-bg{align-items:center;padding:20px;}}
@@ -419,6 +464,119 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
   .afr{grid-template-columns:1fr;}
   .footer-info{text-align:left;}
 }
+
+.client-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(6px);}
+.client-modal-bg.show{opacity:1;pointer-events:all;}
+.client-modal{background:var(--charcoal);border:1.5px solid var(--border2);border-radius:22px 22px 0 0;width:100%;max-width:460px;padding:0 0 24px;transform:translateY(40px);transition:transform .32s cubic-bezier(.23,1,.32,1);box-shadow:0 -8px 48px rgba(0,0,0,.5);}
+.client-modal-bg.show .client-modal{transform:translateY(0);}
+.client-modal-drag{width:40px;height:4px;background:var(--border2);border-radius:2px;margin:12px auto 0;}
+.client-modal-tabs{display:flex;border-bottom:1px solid var(--border);margin:12px 0 0;}
+.cm-tab{flex:1;background:transparent;border:none;color:var(--muted);font-family:'Outfit',sans-serif;font-size:13px;font-weight:700;padding:11px;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;}
+.cm-tab.active{color:var(--text);border-bottom-color:var(--brand);}
+.client-modal-body{padding:16px 18px 0;}
+.cm-form{display:none;flex-direction:column;gap:10px;}
+.cm-form.show{display:flex;}
+.cm-avatar{width:42px;height:42px;border-radius:50%;background:linear-gradient(135deg,var(--brand),#6C63FF);display:flex;align-items:center;justify-content:center;margin:0 auto 2px;}
+.cm-avatar svg{width:18px;height:18px;color:white;}
+.cm-title{text-align:center;font-family:'Playfair Display',serif;font-size:16px;font-weight:900;margin-bottom:1px;}
+.cm-sub{text-align:center;font-size:11px;color:var(--muted);margin-bottom:2px;}
+.cm-field{width:100%;background:var(--mid);border:1.5px solid var(--border2);color:var(--text);padding:10px 12px;border-radius:10px;font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color .2s;}
+.cm-field:focus{border-color:var(--brand);box-shadow:0 0 0 3px rgba(0,85,212,.1);}
+.cm-field::placeholder{color:var(--muted);}
+.btn-cm-submit{width:100%;background:var(--brand);color:white;border:none;padding:11px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:7px;margin-top:2px;line-height:1;}
+.btn-cm-submit svg{width:14px;height:14px;flex-shrink:0;}
+.btn-cm-submit:hover{background:var(--brand2);}
+.cm-divider{text-align:center;color:var(--muted2);font-size:11px;margin:1px 0;position:relative;}
+.cm-divider::before,.cm-divider::after{content:'';position:absolute;top:50%;width:42%;height:1px;background:var(--border2);}
+.cm-divider::before{left:0;}.cm-divider::after{right:0;}
+.btn-cm-google{width:100%;background:var(--mid);border:1.5px solid var(--border2);color:var(--text);padding:10px;border-radius:10px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;line-height:1;}
+.btn-cm-google:hover{border-color:var(--brand);color:var(--brand);}
+.btn-cm-google svg{width:15px;height:15px;}
+.cm-err{color:#E05555;font-size:11px;text-align:center;display:none;}
+.cm-logged{display:none;flex-direction:column;align-items:center;gap:8px;padding:8px 0 4px;}
+.cm-logged.show{display:flex;}
+.cm-user-name{font-size:15px;font-weight:800;}
+.cm-user-email{font-size:11px;color:var(--muted);}
+.btn-cm-logout{margin-top:6px;background:transparent;border:1.5px solid var(--border2);color:var(--muted);padding:9px 24px;border-radius:10px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;}
+.btn-cm-logout:hover{border-color:#E05555;color:#E05555;}
+.fab-login.logged{background:var(--green);box-shadow:0 4px 20px rgba(26,158,92,.45);}
+.fab-login.logged:hover{background:var(--green2);}
+
+.notif-overlay{position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:800;display:flex;align-items:flex-end;justify-content:center;padding:0 0 20px;opacity:0;pointer-events:none;transition:opacity .35s;backdrop-filter:blur(6px);}
+.notif-overlay.show{opacity:1;pointer-events:all;}
+.notif-box{background:var(--charcoal);border:1.5px solid var(--border2);border-radius:22px 22px 18px 18px;width:100%;max-width:420px;padding:28px 24px 24px;text-align:center;transform:translateY(30px);transition:transform .35s cubic-bezier(.23,1,.32,1);box-shadow:0 -8px 48px rgba(0,0,0,.5);}
+.notif-overlay.show .notif-box{transform:translateY(0);}
+.notif-bell{width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--brand),#6C63FF);display:flex;align-items:center;justify-content:center;margin:0 auto 16px;animation:bellRing 1.2s ease .6s both;}
+@keyframes bellRing{0%,100%{transform:rotate(0)}20%{transform:rotate(-18deg)}40%{transform:rotate(18deg)}60%{transform:rotate(-10deg)}80%{transform:rotate(10deg)}}
+.notif-bell svg{width:30px;height:30px;color:white;}
+.notif-box h3{font-family:'Playfair Display',serif;font-size:20px;font-weight:900;margin-bottom:8px;}
+.notif-box p{font-size:13px;color:var(--muted);line-height:1.6;margin-bottom:20px;}
+.notif-box p strong{color:var(--text);}
+.btn-notif-allow{width:100%;background:var(--brand);color:white;border:none;padding:14px;border-radius:12px;font-size:14px;font-weight:800;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;margin-bottom:10px;display:flex;align-items:center;justify-content:center;gap:8px;}
+.btn-notif-allow svg{width:16px;height:16px;}
+.btn-notif-allow:hover{background:var(--brand2);}
+.btn-notif-skip{width:100%;background:transparent;border:none;color:var(--muted);font-size:12px;font-family:'Outfit',sans-serif;cursor:pointer;padding:6px;transition:color .2s;}
+.btn-notif-skip:hover{color:var(--text);}
+
+.cookie-bar{position:fixed;bottom:0;left:0;right:0;z-index:700;background:var(--charcoal);border-top:1.5px solid var(--border2);padding:14px 18px;display:flex;align-items:center;gap:14px;box-shadow:0 -4px 24px rgba(0,0,0,.4);transform:translateY(100%);transition:transform .4s cubic-bezier(.23,1,.32,1);}
+.cookie-bar.show{transform:translateY(0);}
+.cookie-icon{font-size:26px;flex-shrink:0;}
+.cookie-text{flex:1;font-size:12px;color:var(--muted);line-height:1.5;}
+.cookie-text strong{color:var(--text);display:block;margin-bottom:2px;font-size:13px;}
+.cookie-text a{color:var(--brand);text-decoration:none;}
+.cookie-btns{display:flex;gap:8px;flex-shrink:0;}
+.btn-cookie-ok{background:var(--brand);color:white;border:none;padding:9px 18px;border-radius:9px;font-size:12px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;transition:background .2s;}
+.btn-cookie-ok:hover{background:var(--brand2);}
+.btn-cookie-no{background:transparent;border:1.5px solid var(--border2);color:var(--muted);padding:9px 14px;border-radius:9px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Outfit',sans-serif;white-space:nowrap;transition:all .2s;}
+.btn-cookie-no:hover{border-color:var(--text);color:var(--text);}
+@media(max-width:480px){.cookie-bar{flex-wrap:wrap;}.cookie-btns{width:100%;}.btn-cookie-ok,.btn-cookie-no{flex:1;text-align:center;}}
+
+.fab-login{position:fixed;left:20px;bottom:144px;z-index:150;background:var(--gold);color:var(--dark);border:none;border-radius:50px;padding:11px 18px;font-size:13px;font-weight:800;font-family:'Outfit',sans-serif;cursor:pointer;display:flex;align-items:center;gap:8px;box-shadow:0 4px 20px rgba(212,160,23,.45);transition:all .22s;white-space:nowrap;}
+.fab-login svg{width:16px;height:16px;}
+.fab-login:hover{background:var(--gold2);transform:translateY(-2px);box-shadow:0 6px 28px rgba(212,160,23,.55);}
+.fab-login.hidden{opacity:0;pointer-events:none;transform:translateY(10px);}
+
+.nav-profile-chip{display:none;align-items:center;gap:8px;background:var(--mid);border:1.5px solid var(--border2);border-radius:20px;padding:5px 12px 5px 6px;cursor:pointer;transition:all .2s;flex-shrink:0;}
+.nav-profile-chip:hover{border-color:var(--brand);}
+.nav-profile-chip.show{display:flex;}
+.npc-avatar{width:26px;height:26px;border-radius:50%;background:linear-gradient(135deg,var(--brand),#6C63FF);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:800;color:white;flex-shrink:0;}
+.npc-name{font-size:12px;font-weight:700;color:var(--text);max-width:80px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+
+.profile-modal-bg{position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:500;display:flex;align-items:flex-end;justify-content:center;opacity:0;pointer-events:none;transition:opacity .3s;backdrop-filter:blur(6px);}
+.profile-modal-bg.show{opacity:1;pointer-events:all;}
+@media(min-width:600px){.profile-modal-bg{align-items:center;}}
+.profile-modal{background:var(--charcoal);border:1.5px solid var(--border2);border-radius:22px 22px 0 0;width:100%;max-width:460px;padding:0 0 32px;transform:translateY(40px);transition:transform .32s cubic-bezier(.23,1,.32,1);box-shadow:0 -8px 48px rgba(0,0,0,.5);max-height:90dvh;overflow-y:auto;}
+@media(min-width:600px){.profile-modal{border-radius:22px;transform:scale(.95);}}
+.profile-modal-bg.show .profile-modal{transform:translateY(0);}
+@media(min-width:600px){.profile-modal-bg.show .profile-modal{transform:scale(1);}}
+.profile-drag{width:40px;height:4px;background:var(--border2);border-radius:2px;margin:12px auto 0;}
+.profile-head{padding:18px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
+.profile-head h3{font-size:16px;font-weight:800;}
+.profile-hero{display:flex;flex-direction:column;align-items:center;gap:10px;padding:24px 20px 16px;}
+.profile-big-avatar{width:72px;height:72px;border-radius:50%;background:linear-gradient(135deg,var(--brand),#6C63FF);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:white;}
+.profile-user-name{font-size:18px;font-weight:800;}
+.profile-user-email{font-size:12px;color:var(--muted);}
+.profile-user-prov{font-size:11px;color:var(--brand);font-weight:600;background:rgba(0,85,212,.1);padding:3px 10px;border-radius:10px;margin-top:2px;}
+.profile-tabs{display:flex;border-bottom:1px solid var(--border);}
+.profile-tab{flex:1;background:transparent;border:none;color:var(--muted);font-family:'Outfit',sans-serif;font-size:12px;font-weight:700;padding:12px 6px;cursor:pointer;border-bottom:2px solid transparent;transition:all .2s;text-align:center;}
+.profile-tab.active{color:var(--text);border-bottom-color:var(--brand);}
+.profile-body{padding:18px 20px;}
+.profile-section{display:none;}.profile-section.show{display:block;}
+.pf-fg{margin-bottom:14px;}
+.pf-fg label{display:block;font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.8px;margin-bottom:6px;}
+.pf-fg input,.pf-fg select{width:100%;background:var(--mid);border:1.5px solid var(--border2);color:var(--text);padding:11px 13px;border-radius:9px;font-family:'Outfit',sans-serif;font-size:13px;outline:none;transition:border-color .2s;}
+.pf-fg input:focus,.pf-fg select:focus{border-color:var(--brand);}
+.pf-fg select option{background:var(--mid);}
+.btn-pf-save{background:var(--brand);color:white;border:none;padding:12px 28px;border-radius:10px;font-size:13px;font-weight:800;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;width:100%;margin-top:4px;}
+.btn-pf-save:hover{background:var(--brand2);}
+.history-item{background:var(--mid);border:1px solid var(--border2);border-radius:10px;padding:12px 14px;margin-bottom:8px;font-size:12px;}
+.history-item .hi-date{font-size:11px;color:var(--muted);margin-bottom:4px;}
+.history-item .hi-title{font-weight:700;color:var(--text);margin-bottom:2px;}
+.history-item .hi-detail{color:var(--muted);}
+.history-item .hi-price{color:var(--brand);font-weight:800;margin-top:4px;}
+.history-empty{text-align:center;padding:32px 20px;color:var(--muted);font-size:13px;}
+.btn-pf-logout{width:100%;background:transparent;border:1.5px solid rgba(224,85,85,.4);color:#E05555;padding:12px;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Outfit',sans-serif;transition:all .2s;margin-top:8px;}
+.btn-pf-logout:hover{background:rgba(224,85,85,.08);}
 </style>
 </head>
 <body>
@@ -432,7 +590,7 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
       <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
     </svg>
     <div class="splash-brand">
-      <div class="name"><span class="kk">Kak</span>weia</div>
+      <div class="name"><span class="kk">Kak</span>weiya</div>
       <div class="tag">Comercial &nbsp;·&nbsp; Angola</div>
     </div>
   </div>
@@ -471,10 +629,14 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
         <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
       </svg>
       <div class="nav-logo-text">
-        <div class="brand"><span class="kk">Kak</span>weia</div>
+        <div class="brand"><span class="kk">Kak</span>weiya</div>
         <div class="sub">Comercial</div>
       </div>
     </a>
+    <div class="nav-profile-chip" id="navProfileChip" onclick="openProfileModal()">
+      <div class="npc-avatar" id="npcAvatar">?</div>
+      <span class="npc-name" id="npcName">—</span>
+    </div>
     <div class="search-wrap">
       <input type="text" id="searchInput" placeholder="Pesquisar produtos..." oninput="filterProducts()">
       <span class="search-icon">
@@ -498,7 +660,7 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
   <div class="hero-content">
     <div class="hero-badge">
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
-      Kakweia Comercial — Angola
+      Kakweiya Comercial — Angola
     </div>
     <h1>Qualidade,<br><span class="accent">variedade</span><br><span class="light">ao seu alcance</span></h1>
     <p class="hero-desc">Os melhores produtos com os melhores preços. Electrónica, Moda, Casa e muito mais — entregamos em toda Angola.</p>
@@ -511,7 +673,18 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
 </section>
 
 <main class="feed">
-  <div class="section-header">
+  <div class="cat-icons-wrap">
+    <div class="cat-icons-scroll" id="catIconsScroll"></div>
+  </div>
+  <div class="promo-tabs" id="promoTabs">
+    <button class="promo-tab active" onclick="setPromoTab(this,'todos')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>Para ti
+    </button>
+    <button class="promo-tab" onclick="setPromoTab(this,'novo')">✨ Novo In</button>
+    <button class="promo-tab" onclick="setPromoTab(this,'promo')">🏷️ Desconto</button>
+    <button class="promo-tab" onclick="setPromoTab(this,'destaque')">🔥 Mais Vendido</button>
+  </div>
+  <div class="section-header" style="margin-top:14px;">
     <h2 class="section-title">Produtos <span>em Destaque</span></h2>
     <span class="section-count" id="prodCount">A carregar...</span>
   </div>
@@ -531,12 +704,12 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
         <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
       </svg>
       <div class="footer-logo-text">
-        <div class="name"><span class="kk">Kak</span>weia</div>
+        <div class="name"><span class="kk">Kak</span>weiya</div>
         <div class="sub">Comercial</div>
       </div>
     </div>
     <div class="footer-info">
-      <div>© 2026 Kakweia Comercial — Todos os direitos reservados</div>
+      <div>© 2026 Kakweiya Comercial — Todos os direitos reservados</div>
       <div>Loja Online Angola · Pagamento na entrega · Entrega em todo o país</div>
     </div>
   </div>
@@ -615,7 +788,7 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><path d="M20 6L9 17l-5-5"/></svg>
       </div>
       <h3>Pedido Confirmado!</h3>
-      <p>Obrigado pela sua confiança na Kakweia Comercial. A nossa equipa irá entrar em contacto consigo em breve para confirmar a entrega.</p>
+      <p>Obrigado pela sua confiança na Kakweiya Comercial. A nossa equipa irá entrar em contacto consigo em breve para confirmar a entrega.</p>
       <p class="highlight">Será contactado pelo WhatsApp em breve.</p>
       <button class="btn-continue" onclick="closeModal('modalSuccess')">Continuar a Comprar</button>
     </div>
@@ -633,7 +806,7 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
           <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
         </svg>
         <div>
-          <div class="admin-logo-txt"><span class="kk">Kak</span>weia</div>
+          <div class="admin-logo-txt"><span class="kk">Kak</span>weiya</div>
           <div class="admin-logo-sub">Admin</div>
         </div>
       </div>
@@ -651,7 +824,7 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
             <path d="M31 48 L58 20 L70 20 L45 48 L70 76 L58 76 Z" fill="white"/>
             <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
           </svg>
-          <div class="login-logo-name"><span class="kk">Kak</span>weia Comercial</div>
+          <div class="login-logo-name"><span class="kk">Kak</span>weiya Comercial</div>
           <div class="login-logo-sub">Painel Administrativo</div>
         </div>
         <input class="login-field" type="text" id="aUser" placeholder="Utilizador" autocomplete="off">
@@ -676,7 +849,7 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
           <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
         </svg>
         <div>
-          <div class="admin-logo-txt"><span class="kk">Kak</span>weia</div>
+          <div class="admin-logo-txt"><span class="kk">Kak</span>weiya</div>
           <div class="admin-logo-sub">Admin</div>
         </div>
       </div>
@@ -760,8 +933,10 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
               <div class="afg">
                 <label>Categoria</label>
                 <select id="pCat">
+                  <option>Mulher</option><option>Homem</option><option>Menina</option><option>Rapaz</option><option>Bebés</option>
                   <option>Electrónica</option><option>Moda</option><option>Casa</option>
-                  <option>Alimentação</option><option>Beleza</option><option>Desporto</option><option>Outros</option>
+                  <option>Beleza</option><option>Desporto</option><option>Sapatos</option>
+                  <option>Joias</option><option>Alimentação</option><option>Brinquedos</option><option>Outros</option>
                 </select>
               </div>
               <div class="afg">
@@ -792,7 +967,7 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
         <div class="admin-sec" id="secStore">
           <div class="a-card">
             <h3><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.07 4.93l-1.41 1.41M4.93 4.93l1.41 1.41M4.93 19.07l1.41-1.41M19.07 19.07l-1.41-1.41M21 12h-1M4 12H3M12 21v-1M12 4V3"/></svg> Configurações da Loja</h3>
-            <div class="afg"><label>Nome da Loja</label><input type="text" id="sName" placeholder="Kakweia Comercial"></div>
+            <div class="afg"><label>Nome da Loja</label><input type="text" id="sName" placeholder="Kakweiya Comercial"></div>
             <div class="afg"><label>WhatsApp</label><input type="tel" id="sWA" placeholder="Tel:"></div>
             <div class="afg"><label>Cidade / Localização</label><input type="text" id="sCity" placeholder="Luanda, Angola"></div>
             <div class="afg"><label>Nova Senha Admin</label><input type="password" id="sPass" placeholder="Deixar em branco para manter"></div>
@@ -807,9 +982,6 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
   </div>
 </div>
 
-<!-- ================================================
-     BOTÃO AJUDA + MODAL QUEM SOMOS
-================================================ -->
 <button class="help-btn" onclick="openHelp()" title="Ajuda & Informações">
   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><line x1="12" y1="17" x2="12.01" y2="17" stroke-width="3"/></svg>
 </button>
@@ -817,7 +989,6 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
 <div class="help-modal-bg" id="helpModal" onclick="closeHelpOutside(event)">
   <div class="help-modal" id="helpModalBox">
     <div class="help-drag"></div>
-
     <div class="help-head">
       <div class="help-head-logo">
         <svg viewBox="0 0 96 96" fill="none">
@@ -827,7 +998,7 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
           <rect x="22" y="44" width="23" height="8" rx="2" fill="#D4A017"/>
         </svg>
         <div>
-          <div class="help-head-title"><span class="kk">Kak</span>weia Comercial</div>
+          <div class="help-head-title"><span class="kk">Kak</span>weiya Comercial</div>
           <div class="help-head-sub">Angola &nbsp;·&nbsp; Desde 2020</div>
         </div>
       </div>
@@ -835,18 +1006,15 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
       </button>
     </div>
-
     <div class="help-body">
-
-      <!-- QUEM SOMOS -->
       <div class="help-section">
         <div class="help-section-title">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87M16 3.13a4 4 0 010 7.75"/></svg>
           Quem Somos
         </div>
         <p class="help-about-text">
-          A <strong>Kakweia Comercial</strong> é uma empresa angolana com presença em múltiplas províncias do país, dedicada a trazer produtos de qualidade ao alcance de todos os angolanos.<br><br>
-          Importamos directamente dos melhores mercados mundiais — <strong>Estados Unidos, Dubai, China e Europa</strong> — garantindo variedade, qualidade e preços acessíveis para todo o tipo de bolso. Trabalhamos com rigor para que cada encomenda chegue nas melhores condições, no menor tempo possível.
+          A <strong>Kakweiya Comercial</strong> é uma empresa angolana com presença em múltiplas províncias do país, dedicada a trazer produtos de qualidade ao alcance de todos os angolanos.<br><br>
+          Importamos directamente dos melhores mercados mundiais — <strong>Estados Unidos, Dubai, China e Europa</strong> — garantindo variedade, qualidade e preços acessíveis para todo o tipo de bolso.
         </p>
         <div class="help-flags">
           <div class="help-flag"><span>🇺🇸</span> América</div>
@@ -856,19 +1024,13 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
           <div class="help-flag"><span>🇦🇴</span> Angola</div>
         </div>
       </div>
-
-      <!-- MISSÃO -->
       <div class="help-section">
         <div class="help-section-title">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
           Missão & Valores
         </div>
-        <p class="help-about-text">
-          A nossa missão é <strong>democratizar o acesso a produtos de qualidade</strong> em Angola, eliminando intermediários desnecessários e tornando as importações acessíveis a todos. Acreditamos que cada angolano merece ter acesso ao melhor do mercado mundial, independentemente da sua localização ou poder de compra.
-        </p>
+        <p class="help-about-text">A nossa missão é <strong>democratizar o acesso a produtos de qualidade</strong> em Angola, eliminando intermediários desnecessários e tornando as importações acessíveis a todos.</p>
       </div>
-
-      <!-- FUNCIONALIDADES -->
       <div class="help-section">
         <div class="help-section-title">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
@@ -876,82 +1038,37 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
         </div>
         <div class="help-features">
           <div class="help-feature">
-            <div class="help-feature-ico">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-            </div>
-            <div class="help-feature-txt">
-              <h4>Pesquisa Fácil</h4>
-              <p>Pesquise qualquer produto pelo nome ou filtre por categoria.</p>
-            </div>
+            <div class="help-feature-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg></div>
+            <div class="help-feature-txt"><h4>Pesquisa Fácil</h4><p>Pesquise qualquer produto pelo nome ou filtre por categoria.</p></div>
           </div>
           <div class="help-feature">
-            <div class="help-feature-ico">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg>
-            </div>
-            <div class="help-feature-txt">
-              <h4>Carrinho de Compras</h4>
-              <p>Adicione vários produtos e finalize tudo numa só encomenda.</p>
-            </div>
+            <div class="help-feature-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M6 2L3 6v14a2 2 0 002 2h14a2 2 0 002-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 01-8 0"/></svg></div>
+            <div class="help-feature-txt"><h4>Carrinho de Compras</h4><p>Adicione vários produtos e finalize tudo numa só encomenda.</p></div>
           </div>
           <div class="help-feature">
-            <div class="help-feature-ico">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
-            </div>
-            <div class="help-feature-txt">
-              <h4>Entrega em Casa</h4>
-              <p>Entregamos em todas as 18 províncias de Angola.</p>
-            </div>
+            <div class="help-feature-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+            <div class="help-feature-txt"><h4>Entrega em Casa</h4><p>Entregamos em todas as 18 províncias de Angola.</p></div>
           </div>
           <div class="help-feature">
-            <div class="help-feature-ico">
-              <svg viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
-            </div>
-            <div class="help-feature-txt">
-              <h4>Pedido via WhatsApp</h4>
-              <p>Confirme a encomenda directamente pelo WhatsApp de forma rápida.</p>
-            </div>
-          </div>
-          <div class="help-feature">
-            <div class="help-feature-ico">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-            </div>
-            <div class="help-feature-txt">
-              <h4>Compra Segura</h4>
-              <p>Pagamento na entrega — só paga quando receber o produto.</p>
-            </div>
-          </div>
-          <div class="help-feature">
-            <div class="help-feature-ico">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg>
-            </div>
-            <div class="help-feature-txt">
-              <h4>Produtos Originais</h4>
-              <p>Importados directamente da fonte, com garantia de autenticidade.</p>
-            </div>
+            <div class="help-feature-ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+            <div class="help-feature-txt"><h4>Compra Segura</h4><p>Pagamento na entrega — só paga quando receber o produto.</p></div>
           </div>
         </div>
       </div>
-
-      <!-- PROVÍNCIAS -->
       <div class="help-section">
         <div class="help-section-title">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
           Áreas de Cobertura
         </div>
         <div class="help-provinces">
-          <span class="help-prov">Luanda</span><span class="help-prov">Benguela</span>
-          <span class="help-prov">Huambo</span><span class="help-prov">Huíla</span>
-          <span class="help-prov">Cabinda</span><span class="help-prov">Malanje</span>
-          <span class="help-prov">Kwanza Norte</span><span class="help-prov">Kwanza Sul</span>
-          <span class="help-prov">Lunda Norte</span><span class="help-prov">Lunda Sul</span>
-          <span class="help-prov">Bié</span><span class="help-prov">Moxico</span>
-          <span class="help-prov">Cuando Cubango</span><span class="help-prov">Cunene</span>
-          <span class="help-prov">Namibe</span><span class="help-prov">Uíge</span>
-          <span class="help-prov">Zaire</span><span class="help-prov">Cuando Cubango</span>
+          <span class="help-prov">Luanda</span><span class="help-prov">Benguela</span><span class="help-prov">Huambo</span>
+          <span class="help-prov">Huíla</span><span class="help-prov">Cabinda</span><span class="help-prov">Malanje</span>
+          <span class="help-prov">Kwanza Norte</span><span class="help-prov">Kwanza Sul</span><span class="help-prov">Lunda Norte</span>
+          <span class="help-prov">Lunda Sul</span><span class="help-prov">Bié</span><span class="help-prov">Moxico</span>
+          <span class="help-prov">Cuando Cubango</span><span class="help-prov">Cunene</span><span class="help-prov">Namibe</span>
+          <span class="help-prov">Uíge</span><span class="help-prov">Zaire</span>
         </div>
       </div>
-
-      <!-- CONTACTO -->
       <div class="help-section">
         <div class="help-section-title">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18" stroke-width="3"/></svg>
@@ -972,14 +1089,11 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
           </div>
         </div>
       </div>
-
-      <!-- BANNER FINAL -->
       <div class="help-banner">
-        <p>💛 <strong>Obrigado por escolher a Kakweia Comercial.</strong><br>
+        <p>💛 <strong>Obrigado por escolher a Kakweiya Comercial.</strong><br>
         O nosso compromisso é trazer o mundo até si, <strong>a preços que cabem no seu bolso.</strong><br>
         <em style="font-size:12px;color:var(--muted)">Feito com orgulho em Angola 🇦🇴</em></p>
       </div>
-
       <button class="help-close-btn" onclick="closeHelp()">Fechar</button>
     </div>
   </div>
@@ -999,6 +1113,146 @@ footer{background:var(--charcoal);border-top:1px solid var(--border);padding:36p
 
 <div class="toast" id="toast"></div>
 
+<div class="client-modal-bg" id="clientModalBg" onclick="closeClientLoginOutside(event)">
+  <div class="client-modal" id="clientModal">
+    <div class="client-modal-drag"></div>
+    <div class="client-modal-tabs">
+      <button class="cm-tab active" id="cmTabLogin" onclick="switchCmTab('login')">Entrar</button>
+      <button class="cm-tab" id="cmTabReg" onclick="switchCmTab('reg')">Criar Conta</button>
+    </div>
+    <div class="client-modal-body">
+      <div class="cm-form show" id="cmFormLogin">
+        <div class="cm-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M12 14c-6 0-8 2-8 4v1h16v-1c0-2-2-4-8-4z"/></svg></div>
+        <div class="cm-title">Bem-vindo de volta!</div>
+        <div class="cm-sub">Entre na sua conta Kakweiya</div>
+        <input class="cm-field" id="cmLoginEmail" type="email" placeholder="Email">
+        <input class="cm-field" id="cmLoginPass" type="password" placeholder="Palavra-passe" onkeydown="if(event.key==='Enter')doClientLogin()">
+        <div class="cm-err" id="cmLoginErr">Email ou palavra-passe incorretos.</div>
+        <button class="btn-cm-submit" onclick="doClientLogin()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 3h4a2 2 0 012 2v14a2 2 0 01-2 2h-4"/><polyline points="10,17 15,12 10,7"/><line x1="15" y1="12" x2="3" y2="12"/></svg>
+          Entrar
+        </button>
+        <div class="cm-divider">ou</div>
+        <button class="btn-cm-google" onclick="doGoogleLogin()">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continuar com Google
+        </button>
+      </div>
+      <div class="cm-form" id="cmFormReg">
+        <div class="cm-avatar"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><line x1="19" y1="8" x2="19" y2="14"/><line x1="22" y1="11" x2="16" y2="11"/></svg></div>
+        <div class="cm-title">Criar conta grátis</div>
+        <div class="cm-sub">Junte-se à Kakweiya Comercial</div>
+        <input class="cm-field" id="cmRegName" type="text" placeholder="Nome completo">
+        <input class="cm-field" id="cmRegEmail" type="email" placeholder="Email">
+        <select class="cm-field" id="cmRegProv">
+          <option value="">Província *</option>
+          <option>Luanda</option><option>Benguela</option><option>Huambo</option><option>Huíla</option>
+          <option>Cabinda</option><option>Malanje</option><option>Kwanza Norte</option><option>Kwanza Sul</option>
+          <option>Lunda Norte</option><option>Lunda Sul</option><option>Bié</option><option>Moxico</option>
+          <option>Cuando Cubango</option><option>Cunene</option><option>Namibe</option><option>Uíge</option>
+          <option>Zaire</option>
+        </select>
+        <input class="cm-field" id="cmRegPass" type="password" placeholder="Palavra-passe (mín. 6 caracteres)" onkeydown="if(event.key==='Enter')doClientRegister()">
+        <div class="cm-err" id="cmRegErr">Erro ao criar conta. Tente novamente.</div>
+        <button class="btn-cm-submit" onclick="doClientRegister()">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M20 6L9 17l-5-5"/></svg>
+          Criar Conta
+        </button>
+        <div class="cm-divider">ou</div>
+        <button class="btn-cm-google" onclick="doGoogleLogin()">
+          <svg viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+          Continuar com Google
+        </button>
+      </div>
+      <div class="cm-logged" id="cmLogged">
+        <div class="cm-user-name" id="cmUserName">—</div>
+        <div class="cm-user-email" id="cmUserEmail">—</div>
+        <button class="btn-cm-logout" onclick="doClientLogout()">Terminar sessão</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="profile-modal-bg" id="profileModalBg" onclick="closeProfileOutside(event)">
+  <div class="profile-modal" id="profileModal">
+    <div class="profile-drag"></div>
+    <div class="profile-head">
+      <h3>A minha conta</h3>
+      <button class="btn-close" onclick="closeProfileModal()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M18 6L6 18M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="profile-hero">
+      <div class="profile-big-avatar" id="pfBigAvatar">?</div>
+      <div class="profile-user-name" id="pfUserName">—</div>
+      <div class="profile-user-email" id="pfUserEmail">—</div>
+      <div class="profile-user-prov" id="pfUserProv" style="display:none"></div>
+    </div>
+    <div class="profile-tabs">
+      <button class="profile-tab active" onclick="switchProfileTab('edit',this)">✏️ Editar</button>
+      <button class="profile-tab" onclick="switchProfileTab('visits',this)">👁️ Visitas</button>
+      <button class="profile-tab" onclick="switchProfileTab('orders',this)">🛍️ Compras</button>
+    </div>
+    <div class="profile-body">
+      <div class="profile-section show" id="pfSecEdit">
+        <div class="pf-fg"><label>Nome</label><input type="text" id="pfEditName" placeholder="Nome completo"></div>
+        <div class="pf-fg">
+          <label>Província</label>
+          <select id="pfEditProv">
+            <option value="">Selecionar...</option>
+            <option>Luanda</option><option>Benguela</option><option>Huambo</option><option>Huíla</option>
+            <option>Cabinda</option><option>Malanje</option><option>Kwanza Norte</option><option>Kwanza Sul</option>
+            <option>Lunda Norte</option><option>Lunda Sul</option><option>Bié</option><option>Moxico</option>
+            <option>Cuando Cubango</option><option>Cunene</option><option>Namibe</option><option>Uíge</option>
+            <option>Zaire</option>
+          </select>
+        </div>
+        <div class="pf-fg"><label>Nova Palavra-passe</label><input type="password" id="pfEditPass" placeholder="Deixar em branco para manter"></div>
+        <button class="btn-pf-save" onclick="saveProfile()">Guardar alterações</button>
+        <button class="btn-pf-logout" onclick="doClientLogout()">Terminar sessão</button>
+      </div>
+      <div class="profile-section" id="pfSecVisits">
+        <div id="pfVisitsList"><div class="history-empty">Sem histórico de visitas ainda.</div></div>
+      </div>
+      <div class="profile-section" id="pfSecOrders">
+        <div id="pfOrdersList"><div class="history-empty">Sem compras ainda.</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="notif-overlay" id="notifOverlay">
+  <div class="notif-box">
+    <div class="notif-bell">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+    </div>
+    <h3>Fique sempre a par! 🔔</h3>
+    <p>Ative as notificações e seja o <strong>primeiro a saber</strong> das novas chegadas, promoções exclusivas e ofertas relâmpago da Kakweiya Comercial.</p>
+    <button class="btn-notif-allow" onclick="allowNotifications()">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/></svg>
+      Sim, quero ser notificado!
+    </button>
+    <button class="btn-notif-skip" onclick="skipNotifications()">Agora não, obrigado</button>
+  </div>
+</div>
+
+<div class="cookie-bar" id="cookieBar">
+  <div class="cookie-icon">🍪</div>
+  <div class="cookie-text">
+    <strong>Usamos cookies</strong>
+    Este site usa cookies para melhorar a sua experiência e guardar o carrinho. Ao continuar, aceita a nossa <a href="#">política de privacidade</a>.
+  </div>
+  <div class="cookie-btns">
+    <button class="btn-cookie-ok" onclick="acceptCookies()">Aceitar</button>
+    <button class="btn-cookie-no" onclick="declineCookies()">Recusar</button>
+  </div>
+</div>
+
+<button class="fab-login" id="fabLogin" onclick="openClientLogin()">
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M12 14c-6 0-8 2-8 4v1h16v-1c0-2-2-4-8-4z"/></svg>
+  Entrar
+</button>
+
 <script>
 const SUPABASE_URL = 'https://eujgcabznycgdaisvtbz.supabase.co';
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImV1amdjYWJ6bnljZ2RhaXN2dGJ6Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzMwMDQ2NTQsImV4cCI6MjA4ODU4MDY1NH0.epT0ktghstxfxWvykgXMHCd1BZruNt-5GWf88Dp9byQ';
@@ -1008,7 +1262,7 @@ let products  = [];
 let cart      = JSON.parse(localStorage.getItem('kc_cart') || '[]');
 let curCat    = 'Todos';
 let adminPass = localStorage.getItem('kc_ap') || 'angola2025';
-let storeInfo = { name:'Kakweia Comercial', wa:'+244974620666', city:'Luanda, Angola' };
+let storeInfo = { name:'Kakweiya Comercial', wa:'+244974620666', city:'Luanda, Angola' };
 let photoFile = null;
 
 const fmt = n => Number(n).toLocaleString('pt-PT');
@@ -1029,6 +1283,8 @@ const ICO = {
 window.addEventListener('DOMContentLoaded', () => {
   setTimeout(() => { $('splash').classList.add('hide'); setTimeout(() => { $('splash').style.display='none'; }, 900); }, 3200);
   boot();
+  initCookieBanner();
+  showNotifPopup();
 });
 
 async function boot() {
@@ -1067,16 +1323,23 @@ async function loadOrderCount() {
 function getFiltered() {
   const q = $('searchInput').value.toLowerCase().trim();
   return products.filter(p => {
-    const catOk = curCat==='Todos' || p.category===curCat;
-    const qOk   = !q || p.name.toLowerCase().includes(q) || (p.description||'').toLowerCase().includes(q);
-    return catOk && qOk;
+    const catOk  = curCat==='Todos' || p.category===curCat;
+    const qOk    = !q || p.name.toLowerCase().includes(q) || (p.description||'').toLowerCase().includes(q);
+    const promoOk = curPromoTab==='todos' ||
+      (curPromoTab==='novo'     && p.promo==='NOVO') ||
+      (curPromoTab==='promo'    && p.promo && p.promo!=='NOVO' && p.promo!=='DESTAQUE') ||
+      (curPromoTab==='destaque' && p.promo==='DESTAQUE');
+    return catOk && qOk && promoOk;
   });
 }
 
 function renderProducts() {
   const list = getFiltered();
   $('prodCount').textContent = list.length + ' produto' + (list.length!==1?'s':'');
-  if (!list.length) { $('productGrid').innerHTML=`<div class="empty-state">${ICO.pkg}<h3>Sem resultados</h3><p>Tenta outra pesquisa ou categoria</p></div>`; return; }
+  if (!list.length) {
+    $('productGrid').innerHTML=`<div class="empty-state">${ICO.pkg}<h3>Sem resultados</h3><p>Tenta outra pesquisa ou categoria</p></div>`;
+    return;
+  }
   $('productGrid').innerHTML = list.map(p => {
     const sc = p.stock<=0?'no-stock':p.stock<=5?'low-stock':'in-stock';
     const st = p.stock<=0?'Esgotado':p.stock<=5?'Pouco stock':'Em stock';
@@ -1085,12 +1348,19 @@ function renderProducts() {
       <article class="pcard">
         ${p.promo?`<div class="promo-badge">${p.promo}</div>`:''}
         <div class="pcard-img">
-          ${p.image_url?`<img data-src="${p.image_url}" alt="${p.name}" class="lazy-img" onerror="this.style.display='none';this.parentElement.querySelector('.pcard-no-img').style.display='flex'">` : ''}
-          <div class="pcard-no-img" style="display:${p.image_url?'none':'flex'}">${ICO.img}<span>Sem imagem</span></div>
+          <div class="img-skel" id="skel-${p.id}"></div>
+          ${p.image_url
+            ? `<img
+                class="lazy-img"
+                data-src="${p.image_url}"
+                alt="${p.name}"
+                id="img-${p.id}"
+              >`
+            : `<div class="pcard-no-img">${ICO.img}<span>Sem imagem</span></div>`
+          }
         </div>
         <div class="pcard-body">
           <div class="pcard-name">${p.name}</div>
-          <div class="pcard-desc">${p.description||''}</div>
           <div class="pcard-price">${fmt(p.price)}<span class="cur">Kz</span></div>
           <div class="pcard-footer">
             <span class="stock-tag ${sc}"><svg viewBox="0 0 8 8" fill="${dot}"><circle cx="4" cy="4" r="4"/></svg>${st}</span>
@@ -1099,12 +1369,118 @@ function renderProducts() {
         </div>
       </article>`;
   }).join('');
+
+  // Inicia lazy loading após renderizar
   lazyLoadImages();
 }
 
+/* ── LAZY LOADING ESTILO FACEBOOK ──────────────────────────────────────────
+   • IntersectionObserver: imagem só é pedida ao servidor quando está
+     a 300px de entrar no ecrã — poupa dados móveis.
+   • Skeleton animado aparece enquanto carrega (igual ao Facebook feed).
+   • Transição blur→nitidez ao carregar, sem saltos de layout.
+   • Um único Observer reutilizado em re-renders.
+─────────────────────────────────────────────────────────────────────────── */
+let _lazyObs = null;
+
+function lazyLoadImages() {
+  if (!_lazyObs) {
+    _lazyObs = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        const img = entry.target;
+        const src = img.getAttribute('data-src');
+        if (!src) return;
+
+        // Pede a imagem ao servidor
+        img.src = src;
+        img.removeAttribute('data-src');
+
+        img.onload = () => {
+          img.classList.add('loaded');           // remove blur, mostra nitido
+          const skelId = 'skel-' + img.id.replace('img-', '');
+          const skel = document.getElementById(skelId);
+          if (skel) skel.classList.add('done'); // esconde skeleton
+        };
+        img.onerror = () => {
+          img.style.display = 'none';
+          const skelId = 'skel-' + img.id.replace('img-', '');
+          const skel = document.getElementById(skelId);
+          if (skel) skel.style.display = 'none';
+          // Mostra placeholder
+          const noImg = img.closest('.pcard-img');
+          if (noImg) {
+            const div = document.createElement('div');
+            div.className = 'pcard-no-img';
+            div.innerHTML = ICO.img + '<span>Sem imagem</span>';
+            noImg.appendChild(div);
+          }
+        };
+
+        _lazyObs.unobserve(img);
+      });
+    }, {
+      rootMargin: '300px 0px', // começa a carregar 300px antes de aparecer no ecrã
+      threshold: 0
+    });
+  }
+
+  // Observa todas as imagens com data-src ainda não carregadas
+  document.querySelectorAll('img.lazy-img[data-src]').forEach(img => _lazyObs.observe(img));
+}
+
+const ALL_CATS = [
+  {name:'Todos',emoji:'🏠'},{name:'Mulher',emoji:'👗'},{name:'Homem',emoji:'👔'},
+  {name:'Menina',emoji:'🎀'},{name:'Rapaz',emoji:'👦'},{name:'Bebés',emoji:'🍼'},
+  {name:'Electrónica',emoji:'📱'},{name:'Moda',emoji:'✨'},{name:'Casa',emoji:'🏡'},
+  {name:'Beleza',emoji:'💄'},{name:'Desporto',emoji:'⚽'},{name:'Sapatos',emoji:'👟'},
+  {name:'Joias',emoji:'💍'},{name:'Alimentação',emoji:'🛒'},{name:'Brinquedos',emoji:'🧸'},
+  {name:'Outros',emoji:'📦'},
+];
+
+let curPromoTab = 'todos';
+
 function renderCats() {
-  const cats = ['Todos', ...new Set(products.map(p => p.category))];
-  $('catScroll').innerHTML = cats.map(c => `<button class="cat-pill ${c===curCat?'active':''}" onclick="setCat('${c}',this)">${c}</button>`).join('');
+  const cats = ALL_CATS;
+  $('catScroll').innerHTML = cats.map(c =>
+    `<button class="cat-pill ${c.name===curCat?'active':''}" onclick="setCat('${c.name}',this)">${c.name}</button>`
+  ).join('');
+  renderCatIcons(cats);
+}
+
+function renderCatIcons(cats) {
+  const wrap = $('catIconsScroll');
+  if (!wrap) return;
+  wrap.innerHTML = cats.map(c => {
+    const prod = c.name==='Todos'
+      ? products.find(p => p.image_url)
+      : products.find(p => p.category===c.name && p.image_url);
+    const inner = prod
+      ? `<img src="${prod.image_url}" alt="${c.name}" loading="lazy" onerror="this.parentElement.innerHTML='${c.emoji}'">`
+      : c.emoji;
+    return `
+    <div class="cat-icon-item ${c.name===curCat?'active':''}" onclick="setCatIcon('${c.name}',this)">
+      <div class="cat-icon-circle">${inner}</div>
+      <span class="cat-icon-label">${c.name}</span>
+    </div>`;
+  }).join('');
+}
+
+function setCatIcon(cat, el) {
+  curCat = cat;
+  document.querySelectorAll('.cat-icon-item').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.cat-pill').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  const pill = [...document.querySelectorAll('.cat-pill')].find(b=>b.textContent===cat);
+  if (pill) pill.classList.add('active');
+  renderProducts();
+}
+
+function setPromoTab(el, tab) {
+  curPromoTab = tab;
+  document.querySelectorAll('.promo-tab').forEach(b => b.classList.remove('active'));
+  el.classList.add('active');
+  renderProducts();
 }
 
 function setCat(cat, el) {
@@ -1113,36 +1489,8 @@ function setCat(cat, el) {
   el.classList.add('active');
   renderProducts();
 }
+
 function filterProducts() { renderProducts(); }
-
-// ── LAZY LOAD — estilo Facebook ───────────────────
-// Só carrega a foto quando o card entra no ecrã.
-// Enquanto não carrega: fundo skeleton. Quando carrega: blur dissolve.
-let lazyObserver = null;
-
-function lazyLoadImages() {
-  // Reutiliza o mesmo observer se já existir
-  if (!lazyObserver) {
-    lazyObserver = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (!entry.isIntersecting) return;
-        const img = entry.target;
-        const src = img.getAttribute('data-src');
-        if (!src) return;
-        img.src = src;
-        img.removeAttribute('data-src');
-        img.onload  = () => img.classList.add('loaded');
-        img.onerror = () => { img.style.display='none'; const ni=img.parentElement?.querySelector('.pcard-no-img'); if(ni) ni.style.display='flex'; };
-        lazyObserver.unobserve(img);
-      });
-    }, {
-      rootMargin: '200px 0px', // começa a carregar 200px antes de entrar no ecrã
-      threshold: 0
-    });
-  }
-  // Observa todos os imgs com data-src ainda não carregados
-  document.querySelectorAll('img.lazy-img[data-src]').forEach(img => lazyObserver.observe(img));
-}
 
 function addToCart(id) {
   const p = products.find(x => x.id===id);
@@ -1177,7 +1525,9 @@ function renderCart() {
     const sub=p.price*item.qty; total+=sub;
     return `
       <div class="cart-item-card">
-        ${p.image_url?`<div class="ci-thumb"><img src="${p.image_url}" alt="${p.name}"></div>`:`<div class="ci-thumb">${ICO.pkg}</div>`}
+        ${p.image_url
+          ?`<div class="ci-thumb"><img src="${p.image_url}" alt="${p.name}" loading="lazy"></div>`
+          :`<div class="ci-thumb">${ICO.pkg}</div>`}
         <div class="ci-info">
           <div class="ci-name">${p.name}</div>
           <div class="ci-unit">${fmt(p.price)} Kz / unidade</div>
@@ -1203,7 +1553,10 @@ function openCheckout() {
   cart.forEach(item => {
     const p=products.find(x=>x.id===item.id); if(!p) return;
     const sub=p.price*item.qty; total+=sub;
-    html+=`<div class="recap-line">${p.image_url?`<div class="recap-thumb"><img src="${p.image_url}" alt=""></div>`:`<div class="recap-thumb">${ICO.pkg}</div>`}<span style="flex:1">${p.name} × ${item.qty}</span><span>${fmt(sub)} Kz</span></div>`;
+    html+=`<div class="recap-line">
+      ${p.image_url?`<div class="recap-thumb"><img src="${p.image_url}" alt="" loading="lazy"></div>`:`<div class="recap-thumb">${ICO.pkg}</div>`}
+      <span style="flex:1">${p.name} × ${item.qty}</span><span>${fmt(sub)} Kz</span>
+    </div>`;
   });
   html+=`<div class="recap-total"><span>Total</span><span>${fmt(total)} Kz</span></div>`;
   $('orderRecap').innerHTML='<h4>Resumo do Pedido</h4>'+html;
@@ -1230,10 +1583,10 @@ async function submitOrder() {
 
 function sendWhatsApp() {
   const name=$('cName').value.trim()||'—', prov=$('cProv').value||'—', mun=$('cMun').value.trim()||'—', wa=$('cWA').value.trim()||'—';
-  let msg=`*Novo Pedido — Kakweia Comercial*\n\n*Cliente:* ${name}\n*Localização:* ${prov}, ${mun}\n*WhatsApp:* ${wa}\n\n*Produtos:*\n`;
+  let msg=`*Novo Pedido — Kakweiya Comercial*\n\n*Cliente:* ${name}\n*Localização:* ${prov}, ${mun}\n*WhatsApp:* ${wa}\n\n*Produtos:*\n`;
   let total=0;
   cart.forEach(i=>{const p=products.find(x=>x.id===i.id);if(p){msg+=`• ${p.name} × ${i.qty} = ${fmt(p.price*i.qty)} Kz\n`;total+=p.price*i.qty;}});
-  msg+=`\n*Total: ${fmt(total)} Kz*\n_Kakweia Comercial — Angola_`;
+  msg+=`\n*Total: ${fmt(total)} Kz*\n_Kakweiya Comercial — Angola_`;
   window.open(`https://wa.me/${storeInfo.wa.replace(/\D/g,'')}?text=${encodeURIComponent(msg)}`,'_blank');
 }
 
@@ -1270,12 +1623,10 @@ async function uploadPhoto(name) {
 function openAdmin()  { $('adminPanel').classList.add('show'); }
 function closeAdmin() { $('adminPanel').classList.remove('show'); logoClicks = 0; }
 
-// ── MODAL AJUDA ───────────────────────────────────
 function openHelp()  { $('helpModal').classList.add('show'); document.body.style.overflow='hidden'; }
 function closeHelp() { $('helpModal').classList.remove('show'); document.body.style.overflow=''; }
 function closeHelpOutside(e) { if (e.target === $('helpModal')) closeHelp(); }
 
-// ── 5 CLIQUES NO LOGO ────────────────────────────
 let logoClicks = 0;
 let logoTimer  = null;
 function logoClick() {
@@ -1321,7 +1672,7 @@ function renderAdminStats() {
   $('statsProds').innerHTML=products.map(p=>`
     <div style="display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--border);font-size:13px;">
       <div style="width:32px;height:32px;border-radius:7px;background:var(--soft);flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;">
-        ${p.image_url?`<img src="${p.image_url}" style="width:100%;height:100%;object-fit:cover">`:ICO.pkg}
+        ${p.image_url?`<img src="${p.image_url}" style="width:100%;height:100%;object-fit:cover" loading="lazy">`:ICO.pkg}
       </div>
       <span style="flex:1">${p.name}</span>
       <span style="color:${p.stock<=0?'#E05555':p.stock<=5?'var(--gold)':'var(--green)'}">Stock: ${p.stock}</span>
@@ -1331,7 +1682,7 @@ function renderAdminStats() {
 function renderAdminProds() {
   $('adminProdList').innerHTML=products.map(p=>`
     <div class="prod-admin-row">
-      <div class="par-thumb">${p.image_url?`<img src="${p.image_url}" alt="">`:ICO.pkg}</div>
+      <div class="par-thumb">${p.image_url?`<img src="${p.image_url}" alt="" loading="lazy">`:ICO.pkg}</div>
       <div class="par-info">
         <h4>${p.name}</h4>
         <div class="meta">${p.category} · Stock: ${p.stock}${p.promo?` · <b>${p.promo}</b>`:''}</div>
@@ -1414,7 +1765,7 @@ async function deleteProd(id) {
 }
 
 async function saveStore() {
-  const upd=[{key:'store_name',value:$('sName').value||'Kakweia Comercial'},{key:'store_whatsapp',value:$('sWA').value},{key:'store_city',value:$('sCity').value}];
+  const upd=[{key:'store_name',value:$('sName').value||'Kakweiya Comercial'},{key:'store_whatsapp',value:$('sWA').value},{key:'store_city',value:$('sCity').value}];
   for (const u of upd) await sb.from('store_settings').upsert(u,{onConflict:'key'});
   const np=$('sPass').value; if(np){adminPass=np;localStorage.setItem('kc_ap',np);$('sPass').value='';}
   showToast('Configurações guardadas com sucesso','success'); await loadSettings();
@@ -1465,6 +1816,235 @@ function showToast(msg, type='success') {
   t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2800);
 }
+
+function showNotifPopup() {
+  if (localStorage.getItem('kc_notif_asked')) return;
+  setTimeout(() => { $('notifOverlay').classList.add('show'); }, 4000);
+}
+
+function allowNotifications() {
+  $('notifOverlay').classList.remove('show');
+  localStorage.setItem('kc_notif_asked','1');
+  if ('Notification' in window && Notification.permission !== 'granted') {
+    Notification.requestPermission().then(p => {
+      if (p === 'granted') showToast('Notificações ativadas! Obrigado 🔔','success');
+      else showToast('Notificações não foram autorizadas','error');
+    });
+  } else {
+    showToast('Notificações ativadas! Obrigado 🔔','success');
+  }
+}
+
+function skipNotifications() {
+  $('notifOverlay').classList.remove('show');
+  localStorage.setItem('kc_notif_asked','1');
+}
+
+function initCookieBanner() {
+  if (localStorage.getItem('kc_cookie')) return;
+  setTimeout(() => { $('cookieBar').classList.add('show'); }, 1500);
+}
+
+function acceptCookies() {
+  localStorage.setItem('kc_cookie','accepted');
+  $('cookieBar').classList.remove('show');
+  showToast('Preferências guardadas ✓','success');
+}
+
+function declineCookies() {
+  localStorage.setItem('kc_cookie','declined');
+  $('cookieBar').classList.remove('show');
+}
+
+// ── CLIENTE LOGIN/REGISTO ──
+let clientUser = null;
+
+function openClientLogin() {
+  const bg = $('clientModalBg');
+  if (!bg) return;
+  if (clientUser) { openProfileModal(); return; }
+  $('cmFormLogin').classList.add('show');
+  $('cmFormReg').classList.remove('show');
+  $('cmLogged').classList.remove('show');
+  $('cmTabLogin').classList.add('active');
+  $('cmTabReg').classList.remove('active');
+  bg.classList.add('show');
+}
+
+function closeClientLogin() { $('clientModalBg').classList.remove('show'); }
+function closeClientLoginOutside(e) { if (e.target===$('clientModalBg')) closeClientLogin(); }
+
+function switchCmTab(tab) {
+  $('cmFormLogin').classList.toggle('show', tab==='login');
+  $('cmFormReg').classList.toggle('show', tab==='reg');
+  $('cmTabLogin').classList.toggle('active', tab==='login');
+  $('cmTabReg').classList.toggle('active', tab==='reg');
+  $('cmLoginErr').style.display='none';
+  $('cmRegErr').style.display='none';
+}
+
+function updateNavChip() {
+  const chip = $('navProfileChip');
+  if (!chip) return;
+  if (clientUser) {
+    const initials = (clientUser.name||clientUser.email||'?').charAt(0).toUpperCase();
+    $('npcAvatar').textContent = initials;
+    $('npcName').textContent = clientUser.name || clientUser.email.split('@')[0];
+    chip.classList.add('show');
+    const fab = $('fabLogin');
+    if (fab) { fab.classList.add('logged'); fab.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M12 14c-6 0-8 2-8 4v1h16v-1c0-2-2-4-8-4z"/></svg> ${initials}`; }
+  } else {
+    chip.classList.remove('show');
+    const fab = $('fabLogin');
+    if (fab) { fab.classList.remove('logged'); fab.innerHTML = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="4"/><path d="M12 14c-6 0-8 2-8 4v1h16v-1c0-2-2-4-8-4z"/></svg> Entrar`; }
+  }
+}
+
+async function doClientLogin() {
+  const email = ($('cmLoginEmail').value||'').trim();
+  const pass  = ($('cmLoginPass').value||'').trim();
+  $('cmLoginErr').style.display='none';
+  if (!email||!pass) { $('cmLoginErr').textContent='Preencha todos os campos.'; $('cmLoginErr').style.display='block'; return; }
+  const { data, error } = await sb.auth.signInWithPassword({ email, password: pass });
+  if (error) { $('cmLoginErr').textContent = error.message; $('cmLoginErr').style.display='block'; return; }
+  const meta = data.user.user_metadata || {};
+  clientUser = { id: data.user.id, email: data.user.email, name: meta.full_name || data.user.email.split('@')[0], province: meta.province || '' };
+  localStorage.setItem('kc_client', JSON.stringify(clientUser));
+  logVisit();
+  closeClientLogin();
+  updateNavChip();
+  showToast('Bem-vindo de volta, ' + clientUser.name + '! 👋', 'success');
+}
+
+async function doClientRegister() {
+  const name  = ($('cmRegName').value||'').trim();
+  const email = ($('cmRegEmail').value||'').trim();
+  const prov  = ($('cmRegProv').value||'').trim();
+  const pass  = ($('cmRegPass').value||'').trim();
+  $('cmRegErr').style.display='none';
+  if (!name||!email||!pass) { $('cmRegErr').textContent='Preencha nome, email e palavra-passe.'; $('cmRegErr').style.display='block'; return; }
+  if (!prov) { $('cmRegErr').textContent='Selecione a sua província.'; $('cmRegErr').style.display='block'; return; }
+  if (pass.length < 6) { $('cmRegErr').textContent='A palavra-passe deve ter mínimo 6 caracteres.'; $('cmRegErr').style.display='block'; return; }
+  const { data, error } = await sb.auth.signUp({ email, password: pass, options:{ data:{ full_name: name, province: prov } } });
+  if (error) { $('cmRegErr').textContent = error.message; $('cmRegErr').style.display='block'; return; }
+  clientUser = { id: data.user?.id, email, name, province: prov };
+  localStorage.setItem('kc_client', JSON.stringify(clientUser));
+  if (clientUser.id) await sb.from('client_profiles').upsert({ user_id: clientUser.id, name, province: prov, email }, { onConflict:'user_id' });
+  logVisit();
+  closeClientLogin();
+  updateNavChip();
+  showToast('Conta criada com sucesso! Bem-vindo(a), ' + name + ' 🎉', 'success');
+}
+
+async function doGoogleLogin() {
+  const { error } = await sb.auth.signInWithOAuth({ provider: 'google', options:{ redirectTo: window.location.href } });
+  if (error) showToast('Erro ao entrar com Google: ' + error.message, 'error');
+}
+
+function doClientLogout() {
+  sb.auth.signOut();
+  clientUser = null;
+  localStorage.removeItem('kc_client');
+  closeClientLogin();
+  closeProfileModal();
+  updateNavChip();
+  showToast('Sessão terminada.', 'success');
+}
+
+// ── PROFILE MODAL ──
+function openProfileModal() {
+  if (!clientUser) return;
+  const initials = (clientUser.name||'?').charAt(0).toUpperCase();
+  $('pfBigAvatar').textContent = initials;
+  $('pfUserName').textContent  = clientUser.name || '—';
+  $('pfUserEmail').textContent = clientUser.email || '—';
+  if (clientUser.province) {
+    $('pfUserProv').textContent = '📍 ' + clientUser.province;
+    $('pfUserProv').style.display = 'block';
+  } else {
+    $('pfUserProv').style.display = 'none';
+  }
+  $('pfEditName').value = clientUser.name || '';
+  $('pfEditProv').value = clientUser.province || '';
+  $('pfEditPass').value = '';
+  switchProfileTab('edit', document.querySelector('.profile-tab'));
+  loadVisitHistory();
+  loadOrderHistory();
+  $('profileModalBg').classList.add('show');
+}
+
+function closeProfileModal() { $('profileModalBg').classList.remove('show'); }
+function closeProfileOutside(e) { if (e.target===$('profileModalBg')) closeProfileModal(); }
+
+function switchProfileTab(tab, el) {
+  document.querySelectorAll('.profile-tab').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.profile-section').forEach(s => s.classList.remove('show'));
+  if (el) el.classList.add('active');
+  const secMap = { edit:'pfSecEdit', visits:'pfSecVisits', orders:'pfSecOrders' };
+  const sec = $(secMap[tab]); if (sec) sec.classList.add('show');
+}
+
+async function saveProfile() {
+  const name = ($('pfEditName').value||'').trim();
+  const prov = $('pfEditProv').value;
+  const pass = ($('pfEditPass').value||'').trim();
+  if (!name) { showToast('O nome não pode estar vazio.','error'); return; }
+  const updates = { data: { full_name: name, province: prov } };
+  if (pass) { if (pass.length<6) { showToast('Palavra-passe mínimo 6 caracteres.','error'); return; } updates.password = pass; }
+  const { error } = await sb.auth.updateUser(updates);
+  if (error) { showToast('Erro: '+error.message,'error'); return; }
+  clientUser.name = name; clientUser.province = prov;
+  localStorage.setItem('kc_client', JSON.stringify(clientUser));
+  if (clientUser.id) await sb.from('client_profiles').upsert({ user_id: clientUser.id, name, province: prov, email: clientUser.email }, { onConflict:'user_id' });
+  updateNavChip();
+  $('pfUserName').textContent = name;
+  if (prov) { $('pfUserProv').textContent='📍 '+prov; $('pfUserProv').style.display='block'; }
+  showToast('Perfil actualizado com sucesso ✓','success');
+}
+
+async function logVisit() {
+  if (!clientUser?.id) return;
+  try { await sb.from('client_visits').insert({ user_id: clientUser.id, page: window.location.pathname||'/' }); } catch(e){}
+}
+
+async function loadVisitHistory() {
+  if (!clientUser?.id) { $('pfVisitsList').innerHTML='<div class="history-empty">Inicie sessão para ver o histórico.</div>'; return; }
+  const { data } = await sb.from('client_visits').select('*').eq('user_id', clientUser.id).order('visited_at',{ascending:false}).limit(20);
+  if (!data?.length) { $('pfVisitsList').innerHTML='<div class="history-empty">Sem visitas registadas ainda.</div>'; return; }
+  $('pfVisitsList').innerHTML = data.map(v => `
+    <div class="history-item">
+      <div class="hi-date">${new Date(v.visited_at).toLocaleString('pt-PT')}</div>
+      <div class="hi-title">Visita à loja</div>
+      <div class="hi-detail">${v.page||'Página principal'}</div>
+    </div>`).join('');
+}
+
+async function loadOrderHistory() {
+  if (!clientUser?.id) { $('pfOrdersList').innerHTML='<div class="history-empty">Inicie sessão para ver as compras.</div>'; return; }
+  const { data } = await sb.from('orders').select('*').eq('client_user_id', clientUser.id).order('created_at',{ascending:false}).limit(20);
+  if (!data?.length) { $('pfOrdersList').innerHTML='<div class="history-empty">Ainda não fez nenhuma compra.</div>'; return; }
+  $('pfOrdersList').innerHTML = data.map(o => `
+    <div class="history-item">
+      <div class="hi-date">${new Date(o.created_at).toLocaleString('pt-PT')}</div>
+      <div class="hi-title">Pedido #${o.id}</div>
+      <div class="hi-detail">${(o.items||[]).map(i=>i.name+'×'+i.qty).join(', ')}</div>
+      <div class="hi-price">${Number(o.total).toLocaleString('pt-PT')} Kz — <span style="color:var(--muted)">${o.status||'Novo'}</span></div>
+    </div>`).join('');
+}
+
+(async function initClientSession() {
+  const { data: { session } } = await sb.auth.getSession();
+  if (session?.user) {
+    const meta = session.user.user_metadata || {};
+    clientUser = { id: session.user.id, email: session.user.email, name: meta.full_name || session.user.email.split('@')[0], province: meta.province||'' };
+    localStorage.setItem('kc_client', JSON.stringify(clientUser));
+    logVisit();
+  } else {
+    const saved = localStorage.getItem('kc_client');
+    if (saved) try { clientUser = JSON.parse(saved); } catch(e) { localStorage.removeItem('kc_client'); }
+  }
+  updateNavChip();
+})();
 </script>
 </body>
 </html>
